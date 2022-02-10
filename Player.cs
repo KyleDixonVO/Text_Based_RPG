@@ -9,8 +9,8 @@ namespace Test_Based_RPG
     class Player
     {
         private ConsoleKey input;
-        public int x;
-        public int y;
+        public int x = 10;
+        public int y = 10;
         public char avatar = '@';
         private int health = 100;
         private ConsoleKey UP = ConsoleKey.W;
@@ -18,7 +18,7 @@ namespace Test_Based_RPG
         private ConsoleKey LEFT = ConsoleKey.A;
         private ConsoleKey RIGHT = ConsoleKey.D;
 
-        public Tuple <int,int> Move()
+        public void Move()
         {
             input = Console.ReadKey(true).Key;
             if (input == UP)
@@ -38,7 +38,7 @@ namespace Test_Based_RPG
                 x++;
             }
 
-            return Tuple.Create(x, y);
+            //return Tuple.Create(x, y);
         }
 
         private void TakeDamage(int damage)

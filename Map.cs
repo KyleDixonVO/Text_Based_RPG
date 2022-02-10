@@ -33,7 +33,7 @@ namespace Test_Based_RPG
             {'\'','\'','\'','\'','\'','\'','\'','\'','\'','\'','\'','\'','\'','\'','\'','\'','\'','\'','\'','\'','\'','\'','\'','\'','\'','\'','\'','\'','\'','\''},
             //{'\'','\'','\'','\'','\'','\'','\'','\'','\'','\'','\'','\'','\'','\'','\'','\'','\'','\'','\'','\'','\'','\'','\'','\'','\'','\'','\'','\'','\'','\''}, //extra row for testing
         };
-        public void Update()
+        public void Update(int playerX, int playerY, int enemyX, int enemyY, char playerAvatar, char enemyAvatar)
         {
             DrawMap();
             DrawEntities(playerX,playerY,enemyX,enemyY,playerAvatar,enemyAvatar);
@@ -54,11 +54,11 @@ namespace Test_Based_RPG
         {
             rows = mapTiles.GetUpperBound(0) + 1;
             columns = mapTiles.GetUpperBound(1) + 1;
-            Console.SetBufferSize((columns + 2), (rows * 3));
-            Console.SetBufferSize((columns + 2), (rows * 3));
+            Console.SetWindowSize((columns +2), (columns +2));
+            Console.SetBufferSize((columns +2), (columns +2));
         }
 
-        private void DrawMap()
+        private void DrawMap(int playerX, int playerY, int enemyX, int enemyY)
         {
             
             if (hasMapInitialized == false)
@@ -68,7 +68,7 @@ namespace Test_Based_RPG
                 DrawBorderH();
                 for (int i = 0; i < rows; i++)
                 {
-                    Console.Write("\r\n");
+                    Console.Write("\r");
                     DrawBorderV();
                     for (int j = 0; j < columns; j++)
                     {
@@ -76,14 +76,17 @@ namespace Test_Based_RPG
                     }
                     DrawBorderV();
                 }
-                Console.Write("\r\n");
+                Console.Write("\r");
                 DrawBorderH();
             }
+            hasMapInitialized = true;
+
+
         }
 
         private void DrawBorderH()
         {
-            for (int i = 0; i < columns; i++)
+            for (int i = 0; i < columns +2; i++)
             {
                 Console.Write('═');
             }
