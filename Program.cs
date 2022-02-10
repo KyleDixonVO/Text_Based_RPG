@@ -17,8 +17,8 @@ namespace Test_Based_RPG
             while(true)
             {
                 map.Update(player.x, player.y, enemy.x, enemy.y, player.avatar, enemy.avatar);
-                player.Move();
-                enemy.Move(player.x, player.y);
+                player.Move(map);
+                enemy.Move(player.x, player.y, map);
             }
         }
     }

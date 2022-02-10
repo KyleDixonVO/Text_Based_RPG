@@ -18,7 +18,7 @@ namespace Test_Based_RPG
         private int prevX;
         private bool blockedX = false;
         private bool blockedY = false;
-        public void Move(int playerX, int playerY)
+        public void Move(int playerX, int playerY, Map map)
         {
             
             if (turnCount == 2)
@@ -26,30 +26,48 @@ namespace Test_Based_RPG
                 if (trackingX > x && blockedX == false)
                 {
                     x++;
+                    if (map.isObjectSolid(x, y))
+                    {
+                        x++;
+                    }
                     CheckBlockedX();
                     trackingX = playerX;
                 }
                 else if (trackingX < x && blockedX == false)
                 {
                     x--;
+                    if (map.isObjectSolid(x, y))
+                    {
+                        x--;
+                    }
                     CheckBlockedX();
                     trackingX = playerX;
                 }
                 else if (trackingY > y && blockedY == false)
                 {
                     y++;
+                    if (map.isObjectSolid(x, y))
+                    {
+                        y--;
+                    }
                     CheckBlockedY();
                     trackingY = playerY;
                 }
                 else if (trackingY < y && blockedY == false)
                 {
                     y--;
+                    if (map.isObjectSolid(x, y))
+                    {
+                        y++;
+                    }
                     CheckBlockedY();
                     trackingY = playerY;
                 }
                 turnCount = 0;
             }
             turnCount++;
+            prevX = x;
+            prevY = y;
         }
 
         private void CheckBlockedX()

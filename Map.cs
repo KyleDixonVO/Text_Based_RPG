@@ -10,12 +10,10 @@ namespace Test_Based_RPG
     {
         private int rows;
         private int columns;
-        private int playerX;
-        private int playerY;
-        private int enemyX;
-        private int enemyY;
-        private char playerAvatar;
-        private char enemyAvatar;
+        private int PrevEnemyX;
+        private int PrevEnemyY;
+        private int PrevPlayerX;
+        private int PrevPlayerY;
         private bool hasMapInitialized = false;
         public char[,] mapTiles = new char[,]
         {
@@ -35,7 +33,7 @@ namespace Test_Based_RPG
         };
         public void Update(int playerX, int playerY, int enemyX, int enemyY, char playerAvatar, char enemyAvatar)
         {
-            DrawMap();
+            DrawMap(playerX, playerY, enemyX, enemyY);
             DrawEntities(playerX,playerY,enemyX,enemyY,playerAvatar,enemyAvatar);
         }
 
@@ -81,7 +79,14 @@ namespace Test_Based_RPG
             }
             hasMapInitialized = true;
 
-
+            Console.SetCursorPosition(PrevPlayerX, PrevPlayerY);
+            Console.Write(mapTiles[PrevPlayerY, PrevPlayerX]);
+            Console.SetCursorPosition(PrevEnemyX, PrevEnemyY);
+            Console.Write(mapTiles[PrevEnemyY, PrevEnemyX]);
+            PrevPlayerX = playerX;
+            PrevPlayerY = playerY;
+            PrevEnemyX = enemyX;
+            PrevEnemyY = enemyY;
         }
 
         private void DrawBorderH()
@@ -95,6 +100,15 @@ namespace Test_Based_RPG
         private void DrawBorderV()
         {
             Console.Write('║');
+        }
+
+        public bool isObjectSolid(int solidX, int solidY)
+        {
+            if (mapTiles[solidY, solidX] == '^' || mapTiles [solidY,solidX] == '~' || mapTiles[solidY, solidX] == '║' || mapTiles[solidY,solidX] == '═')
+            {
+                return true;
+            }
+            return false;
         }
     }
 }

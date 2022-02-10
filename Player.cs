@@ -18,27 +18,44 @@ namespace Test_Based_RPG
         private ConsoleKey LEFT = ConsoleKey.A;
         private ConsoleKey RIGHT = ConsoleKey.D;
 
-        public void Move()
+        public void Move(Map map)
         {
+
+
             input = Console.ReadKey(true).Key;
             if (input == UP)
             {
                 y--;
+                if (map.isObjectSolid(x-1,y-1) == true)
+                {
+                    y++;
+                }
             }
             if (input == DOWN)
             {
                 y++;
+                 if (map.isObjectSolid(x-1,y-1) == true)
+                 {
+                    y--;
+                 }
             }
             if (input == LEFT)
             {
                 x--;
+                 if (map.isObjectSolid(x-1,y-1) == true)
+                 {
+                    x++;
+                 }
             }
             if (input == RIGHT)
             {
                 x++;
+                 if (map.isObjectSolid(x-1,y-1) == true)
+                 {
+                    x--;
+                 }
             }
 
-            //return Tuple.Create(x, y);
         }
 
         private void TakeDamage(int damage)
