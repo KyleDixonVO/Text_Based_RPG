@@ -45,7 +45,7 @@ namespace Test_Based_RPG
                 }
 
                 //detecting collision with solid objects
-                if (map.isObjectSolid(x,y))
+                if (map.IsObjectSolid(x,y))
                 {
                     RecallLastPosition();
                 }
@@ -53,6 +53,8 @@ namespace Test_Based_RPG
                 //detecting collision with player
                 if (IsGameCharacter(player, this))
                 {
+                    Console.Beep(200, 33);
+                    Console.Beep(100, 33);
                     player.TakeDamage();
                     RecallLastPosition();
                     playerHit = true;
