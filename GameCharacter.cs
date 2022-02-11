@@ -39,8 +39,8 @@ namespace Test_Based_RPG
 
         public void ShowStats()
         {
-            Console.ForegroundColor = ConsoleColor.DarkGray;
-            Console.BackgroundColor = ConsoleColor.Green;
+            Console.ForegroundColor = ConsoleColor.White;
+            Console.BackgroundColor = ConsoleColor.DarkGreen;
             Console.SetCursorPosition(1, 13);
             Console.Write(avatar + " health: " + health + "/" + maxHealth + " ");
             Console.ResetColor();
