@@ -10,40 +10,50 @@ namespace Test_Based_RPG
     {
         private int rows;
         private int columns;
-        private int PrevEnemyX;
-        private int PrevEnemyY;
-        private int PrevPlayerX;
-        private int PrevPlayerY;
         private bool hasMapInitialized = false;
         public char[,] mapTiles = new char[,]
         {
-            {'^','^','^','\'','\'','\'','\'','\'','\'','\'','\'','\'','\'','\'','\'','\'','\'','\'','\'','\'','\'','\'','\'','\'','\'','\'','\'','\'','\'','\''},
-            {'^','^','\'','\'','\'','\'','*','*','\'','\'','\'','\'','\'','\'','\'','\'','\'','\'','\'','\'','\'','\'','\'','\'','~','~','~','\'','\'','\''},
-            {'^','^','\'','\'','\'','*','*','\'','\'','\'','\'','\'','\'','\'','\'','\'','\'','\'','\'','\'','\'','\'','~','~','~','\'','\'','\'','\'','\''},
-            {'^','\'','\'','\'','\'','\'','\'','\'','\'','\'','\'','\'','\'','\'','\'','\'','\'','\'','\'','\'','\'','\'','\'','\'','\'','\'','\'','\'','\'','\''},
-            {'\'','\'','\'','\'','~','~','~','\'','\'','\'','\'','\'','\'','\'','\'','\'','\'','\'','\'','\'','\'','\'','\'','\'','\'','\'','\'','\'','\'','\''},
-            {'\'','\'','\'','\'','~','~','~','\'','\'','\'','\'','\'','\'','\'','\'','\'','\'','\'','\'','\'','\'','\'','\'','\'','\'','\'','\'','\'','\'','\''},
-            {'\'','\'','\'','~','~','~','~','\'','\'','\'','\'','\'','\'','\'','\'','\'','\'','\'','\'','\'','\'','\'','^','^','\'','\'','\'','\'','\'','\''},
-            {'\'','\'','\'','\'','\'','~','~','~','\'','\'','\'','\'','\'','\'','\'','\'','\'','\'','\'','\'','\'','^','^','^','^','\'','\'','\'','\'','\''},
-            {'\'','\'','\'','\'','\'','~','~','~','~','\'','\'','\'','\'','\'','\'','\'','\'','\'','\'','\'','\'','\'','\'','^','^','^','^','\'','\'','\''},
-            {'\'','\'','\'','\'','\'','\'','\'','~','\'','\'','\'','\'','\'','\'','\'','\'','\'','\'','\'','\'','\'','\'','\'','\'','\'','\'','\'','\'','\'','\''},
-            {'\'','\'','\'','\'','\'','\'','\'','\'','\'','\'','\'','\'','\'','\'','\'','\'','\'','\'','\'','\'','\'','\'','\'','\'','\'','\'','\'','\'','\'','\''},
-            {'\'','\'','\'','\'','\'','\'','\'','\'','\'','\'','\'','\'','\'','\'','\'','\'','\'','\'','\'','\'','\'','\'','\'','\'','\'','\'','\'','\'','\'','\''},
-            //{'\'','\'','\'','\'','\'','\'','\'','\'','\'','\'','\'','\'','\'','\'','\'','\'','\'','\'','\'','\'','\'','\'','\'','\'','\'','\'','\'','\'','\'','\''}, //extra row for testing
+            {'╔','═','═','═','═','═','═','═','═','═','═','═','═','═','═','═','═','═','═','═','═','═','═','═','═','═','═','═','═','╗'},
+            {'║','^',' ',' ',' ',' ','*','*',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ','~','~','~',' ',' ','║'},
+            {'║','^',' ',' ',' ','*','*',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ','~','~','~',' ',' ',' ',' ','║'},
+            {'║',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ','║'},
+            {'║',' ',' ',' ','~','~','~',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ','║'},
+            {'║',' ',' ',' ','~','~','~',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ','║'},
+            {'║',' ',' ','~','~','~','~',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ','^','^',' ',' ',' ',' ',' ','║'},
+            {'║',' ',' ',' ',' ','~','~','~',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ','^','^','^','^',' ',' ',' ',' ','║'},
+            {'║',' ',' ',' ',' ','~','~','~','~',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ','^','^','^','^',' ',' ','║'},
+            {'║',' ',' ',' ',' ',' ',' ','~',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ','║'},
+            {'║',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ','║'},
+            {'╚','═','═','═','═','═','═','═','═','═','═','═','═','═','═','═','═','═','═','═','═','═','═','═','═','═','═','═','═','╝'},
         };
-        public void Update(int playerX, int playerY, int enemyX, int enemyY, char playerAvatar, char enemyAvatar)
+        public void Update(Player player, ref Enemy enemy)
         {
-            DrawMap(playerX, playerY, enemyX, enemyY);
-            DrawEntities(playerX,playerY,enemyX,enemyY,playerAvatar,enemyAvatar);
+            DrawMap(player, enemy);
+            DrawEntities(player, ref enemy);
         }
 
-        private void DrawEntities(int playerX, int playerY, int enemyX, int enemyY, char playerAvatar, char enemyAvatar)
+        private void DrawEntities(Player player, ref Enemy enemy)
         {
             //drawing player
-            Console.SetCursorPosition(playerX, playerY);
-            Console.Write(playerAvatar);
-            Console.SetCursorPosition(enemyX, enemyY);
-            Console.Write(enemyAvatar);
+            Console.SetCursorPosition(player.x, player.y);
+            Console.Write(player.avatar);
+
+            //drawing enemy
+            if (enemy != null)
+            {
+                if (enemy.dead == false)
+                {
+                    Console.SetCursorPosition(enemy.x, enemy.y);
+                    Console.Write(enemy.avatar);
+                }
+                else
+                {
+                    enemy.avatar = ' ';
+                    Console.SetCursorPosition(enemy.x, enemy.y);
+                    Console.Write(enemy.avatar);
+                    enemy = null;
+                }
+            }
         }
 
         
@@ -52,46 +62,40 @@ namespace Test_Based_RPG
         {
             rows = mapTiles.GetUpperBound(0) + 1;
             columns = mapTiles.GetUpperBound(1) + 1;
-            Console.SetWindowSize((columns +2), (columns +2));
-            Console.SetBufferSize((columns +2), (columns +2));
+            Console.SetWindowSize((columns), (columns));
+            Console.SetBufferSize((columns), (columns));
         }
 
-        private void DrawMap(int playerX, int playerY, int enemyX, int enemyY)
+        private void DrawMap(Player player, Enemy enemy)
         {
-            
+            Console.SetCursorPosition(0, 0);
             if (hasMapInitialized == false)
             {
                 SetBounds();
-
-                DrawBorderH();
                 for (int i = 0; i < rows; i++)
                 {
                     Console.Write("\r");
-                    DrawBorderV();
                     for (int j = 0; j < columns; j++)
                     {
                         Console.Write(mapTiles[i, j]);
                     }
-                    DrawBorderV();
                 }
                 Console.Write("\r");
-                DrawBorderH();
             }
             hasMapInitialized = true;
 
-            Console.SetCursorPosition(PrevPlayerX, PrevPlayerY);
-            Console.Write(mapTiles[PrevPlayerY, PrevPlayerX]);
-            Console.SetCursorPosition(PrevEnemyX, PrevEnemyY);
-            Console.Write(mapTiles[PrevEnemyY, PrevEnemyX]);
-            PrevPlayerX = playerX;
-            PrevPlayerY = playerY;
-            PrevEnemyX = enemyX;
-            PrevEnemyY = enemyY;
+            Console.SetCursorPosition(player.LastX, player.LastY);
+            Console.Write(mapTiles[player.LastY, player.LastX]);
+            if (enemy != null)
+            {
+                Console.SetCursorPosition(enemy.LastX, enemy.LastY);
+                Console.Write(mapTiles[enemy.LastY, enemy.LastX]);
+            }
         }
 
         private void DrawBorderH()
         {
-            for (int i = 0; i < columns +2; i++)
+            for (int i = 0; i < columns; i++)
             {
                 Console.Write('═');
             }
@@ -102,9 +106,9 @@ namespace Test_Based_RPG
             Console.Write('║');
         }
 
-        public bool isObjectSolid(int solidX, int solidY)
+        public bool isObjectSolid(int testX, int testY)
         {
-            if (mapTiles[solidY, solidX] == '^' || mapTiles [solidY,solidX] == '~' || mapTiles[solidY, solidX] == '║' || mapTiles[solidY,solidX] == '═')
+            if (mapTiles[testY, testX] == '^' || mapTiles [testY,testX] == '~' || mapTiles[testY, testX] == '║' || mapTiles[testY,testX] == '═' || mapTiles[testY, testX] == '*')
             {
                 return true;
             }

@@ -6,73 +6,70 @@ using System.Threading.Tasks;
 
 namespace Test_Based_RPG
 {
-    class Enemy
+    class Enemy : GameCharacter
     {
         private int turnCount;
-        public int x = 5;
-        public int y = 5;
-        public char avatar = '!';
         private int trackingY;
         private int trackingX;
-        private int prevY;
-        private int prevX;
         private bool blockedX = false;
         private bool blockedY = false;
-        public void Move(int playerX, int playerY, Map map)
+        private bool playerHit = false;
+
+        public void Move(Map map, Player player)
         {
-            
+            SaveLastPosition();
             if (turnCount == 2)
             {
+                playerHit = false;
+
+                //logic used to move toward the player
                 if (trackingX > x && blockedX == false)
                 {
                     x++;
-                    if (map.isObjectSolid(x, y))
-                    {
-                        x++;
-                    }
                     CheckBlockedX();
-                    trackingX = playerX;
                 }
                 else if (trackingX < x && blockedX == false)
                 {
                     x--;
-                    if (map.isObjectSolid(x, y))
-                    {
-                        x--;
-                    }
                     CheckBlockedX();
-                    trackingX = playerX;
                 }
                 else if (trackingY > y && blockedY == false)
                 {
                     y++;
-                    if (map.isObjectSolid(x, y))
-                    {
-                        y--;
-                    }
                     CheckBlockedY();
-                    trackingY = playerY;
                 }
                 else if (trackingY < y && blockedY == false)
                 {
                     y--;
-                    if (map.isObjectSolid(x, y))
-                    {
-                        y++;
-                    }
                     CheckBlockedY();
-                    trackingY = playerY;
                 }
+
+                //detecting collision with solid objects
+                if (map.isObjectSolid(x,y))
+                {
+                    RecallLastPosition();
+                }
+
+                //detecting collision with player
+                if (IsGameCharacter(player, this))
+                {
+                    player.TakeDamage();
+                    RecallLastPosition();
+                    playerHit = true;
+                }
+
                 turnCount = 0;
             }
+
+            //updating turn count and tracking info
             turnCount++;
-            prevX = x;
-            prevY = y;
+            trackingY = player.y;
+            trackingX = player.x;
         }
 
         private void CheckBlockedX()
         {
-            if (x == prevX)
+            if (x == LastX && playerHit == false)
             {
                 blockedX = true;
             }
@@ -84,7 +81,7 @@ namespace Test_Based_RPG
 
         private void CheckBlockedY()
         {
-            if (y == prevY)
+            if (y == LastY && playerHit == false)
             {
                 blockedY = true;
             }
@@ -92,6 +89,15 @@ namespace Test_Based_RPG
             {
                 blockedY = false;
             }
+        }
+
+        public new void ShowStats()
+        {
+            Console.ForegroundColor = ConsoleColor.Gray;
+            Console.BackgroundColor = ConsoleColor.Red;
+            Console.SetCursorPosition(1, 14);
+            Console.Write(avatar + " health: " + health + "/" + maxHealth + " ");
+            Console.ResetColor();
         }
     }
 }

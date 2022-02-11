@@ -6,61 +6,48 @@ using System.Threading.Tasks;
 
 namespace Test_Based_RPG
 {
-    class Player
+    class Player: GameCharacter
     {
         private ConsoleKey input;
-        public int x = 10;
-        public int y = 10;
-        public char avatar = '@';
-        private int health = 100;
         private ConsoleKey UP = ConsoleKey.W;
         private ConsoleKey DOWN = ConsoleKey.S;
         private ConsoleKey LEFT = ConsoleKey.A;
         private ConsoleKey RIGHT = ConsoleKey.D;
 
-        public void Move(Map map)
+        public void Move(Map map, Enemy enemy)
         {
 
-
+            SaveLastPosition();
             input = Console.ReadKey(true).Key;
             if (input == UP)
             {
                 y--;
-                if (map.isObjectSolid(x-1,y-1) == true)
-                {
-                    y++;
-                }
             }
-            if (input == DOWN)
+            else if (input == DOWN)
             {
                 y++;
-                 if (map.isObjectSolid(x-1,y-1) == true)
-                 {
-                    y--;
-                 }
             }
-            if (input == LEFT)
+            else if (input == LEFT)
             {
                 x--;
-                 if (map.isObjectSolid(x-1,y-1) == true)
-                 {
-                    x++;
-                 }
             }
-            if (input == RIGHT)
+            else if (input == RIGHT)
             {
                 x++;
-                 if (map.isObjectSolid(x-1,y-1) == true)
-                 {
-                    x--;
-                 }
             }
 
+            if (map.isObjectSolid(x, y) == true)
+            {
+                RecallLastPosition();
+            }
+
+            if (IsGameCharacter(this, enemy))
+            {
+                enemy.TakeDamage();
+                RecallLastPosition();
+            }
         }
 
-        private void TakeDamage(int damage)
-        {
-            health -= damage;
-        }
+       
     }
 }
