@@ -14,10 +14,12 @@ namespace Test_Based_RPG
         private bool blockedX = false;
         private bool blockedY = false;
         private bool playerHit = false;
+        private bool canBeNulled = false;
 
         public void Move(Map map, Player player)
         {
-            SaveLastPosition();
+
+            SavePosition();
             if (turnCount == 2)
             {
                 playerHit = false;

@@ -39,21 +39,21 @@ namespace Test_Based_RPG
             Console.Write(player.avatar);
 
             //drawing enemy
-            if (enemy != null)
+            if (enemy == null)return;
+            
+            if (enemy.dead == false)
             {
-                if (enemy.dead == false)
-                {
-                    Console.SetCursorPosition(enemy.x, enemy.y);
-                    Console.Write(enemy.avatar);
-                }
-                else
-                {
-                    enemy.avatar = ' ';
-                    Console.SetCursorPosition(enemy.x, enemy.y);
-                    Console.Write(enemy.avatar);
-                    enemy = null;
-                }
+                Console.SetCursorPosition(enemy.x, enemy.y);
+                Console.Write(enemy.avatar);
             }
+            else
+            {
+                enemy.avatar = ' ';
+                Console.SetCursorPosition(enemy.x, enemy.y);
+                Console.Write(enemy.avatar);
+                enemy = null;
+            }
+            
         }
 
         

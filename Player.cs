@@ -17,7 +17,7 @@ namespace Test_Based_RPG
         public void Move(Map map, Enemy enemy)
         {
 
-            SaveLastPosition();
+            SavePosition();
             input = Console.ReadKey(true).Key;
             if (input == UP || input == ConsoleKey.UpArrow)
             {

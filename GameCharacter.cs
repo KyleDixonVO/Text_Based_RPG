@@ -48,21 +48,19 @@ namespace Test_Based_RPG
 
         protected bool IsGameCharacter(Player player, Enemy enemy)
         {
-            if (enemy != null)
+            if (enemy == null) return false; 
+            
+            if (player.x == enemy.x && player.y == enemy.y)
             {
-                if (player.x == enemy.x && player.y == enemy.y)
-                {
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
+                return true;
             }
-            return false;
+            else
+            {
+                return false;
+            }
         }
 
-        protected void SaveLastPosition()
+        protected void SavePosition()
         {
             LastX = x;
             LastY = y;
