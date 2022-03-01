@@ -8,72 +8,16 @@ namespace Test_Based_RPG
 {
     class Enemy : GameCharacter
     {
-        private int turnCount;
-        private int trackingY;
-        private int trackingX;
-        private bool blockedX = false;
-        private bool blockedY = false;
-        private bool playerHit = false;
-        private bool canBeNulled = false;
+        protected int turnCount;
+        protected bool blockedX = false;
+        protected bool blockedY = false;
+        protected bool playerHit = false;
 
-        public void Move(Map map, Player player)
+
+
+        protected void CheckBlockedX()
         {
-
-            SavePosition();
-            if (turnCount == 2)
-            {
-                playerHit = false;
-
-                //logic used to move toward the player
-                if (trackingX > x && blockedX == false)
-                {
-                    x++;
-                    CheckBlockedX();
-                }
-                else if (trackingX < x && blockedX == false)
-                {
-                    x--;
-                    CheckBlockedX();
-                }
-                else if (trackingY > y && blockedY == false)
-                {
-                    y++;
-                    CheckBlockedY();
-                }
-                else if (trackingY < y && blockedY == false)
-                {
-                    y--;
-                    CheckBlockedY();
-                }
-
-                //detecting collision with solid objects
-                if (map.IsObjectSolid(x,y))
-                {
-                    RecallLastPosition();
-                }
-
-                //detecting collision with player
-                if (IsGameCharacter(player, this))
-                {
-                    Console.Beep(200, 33);
-                    Console.Beep(100, 33);
-                    player.TakeDamage();
-                    RecallLastPosition();
-                    playerHit = true;
-                }
-
-                turnCount = 0;
-            }
-
-            //updating turn count and tracking info
-            turnCount++;
-            trackingY = player.y;
-            trackingX = player.x;
-        }
-
-        private void CheckBlockedX()
-        {
-            if (x == LastX && playerHit == false)
+            if (futureX == lastX && playerHit == false)
             {
                 blockedX = true;
             }
@@ -83,9 +27,9 @@ namespace Test_Based_RPG
             }
         }
 
-        private void CheckBlockedY()
+        protected void CheckBlockedY()
         {
-            if (y == LastY && playerHit == false)
+            if (futureY == lastY && playerHit == false)
             {
                 blockedY = true;
             }

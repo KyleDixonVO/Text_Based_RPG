@@ -6,16 +6,18 @@ using System.Threading.Tasks;
 
 namespace Test_Based_RPG
 {
-    abstract class GameCharacter
+    abstract class GameCharacter : GameObject
     {
-        public int LastX;
-        public int LastY;
+        public int deltaX;
+        public int deltaY;
+        public int futureX;
+        public int futureY;
+        public int lastX;
+        public int lastY;
         public int health = 5;
         public int maxHealth = 5;
-        public int x = 10;
-        public int y = 10;
-        public char avatar = '@';
         public bool dead = false;
+        public bool canMoveThere;
 
         public void Initialize(int setHealth, int setX, int setY, char setAvatar)
         {
@@ -50,7 +52,7 @@ namespace Test_Based_RPG
         {
             if (enemy == null) return false; 
             
-            if (player.x == enemy.x && player.y == enemy.y)
+            if ((player.futureX == enemy.x && player.futureY == enemy.y) || (player.x == enemy.futureX && player.y == enemy.futureY))
             {
                 return true;
             }
@@ -60,16 +62,28 @@ namespace Test_Based_RPG
             }
         }
 
-        protected void SavePosition()
+        protected void GetFuturePosition()
         {
-            LastX = x;
-            LastY = y;
+            futureX = x + deltaX;
+            futureY = y + deltaY;
         }
 
-        protected void RecallLastPosition()
+        protected void SaveLastPosition()
         {
-            x = LastX;
-            y = LastY;
+            lastX = x;
+            lastY = y;
+        }
+
+        public void Move()
+        {
+            if (canMoveThere == true)
+            {
+                y = futureY;
+                x = futureX;
+            }
+
+            deltaX = 0;
+            deltaY = 0;
         }
     }
 }

@@ -13,33 +13,36 @@ namespace Test_Based_RPG
         private readonly ConsoleKey DOWN = ConsoleKey.S;
         private readonly ConsoleKey LEFT = ConsoleKey.A;
         private readonly ConsoleKey RIGHT = ConsoleKey.D;
+        public new char avatar = '@';
 
-        public void Move(Map map, Enemy enemy)
+        public void CalculateMovement(Map map, Enemy enemy)
         {
-
-            SavePosition();
+            SaveLastPosition();
+            canMoveThere = true;
             input = Console.ReadKey(true).Key;
             if (input == UP || input == ConsoleKey.UpArrow)
             {
-                y--;
+                deltaY = -1;
             }
             else if (input == DOWN || input == ConsoleKey.DownArrow)
             {
-                y++;
+                deltaY = 1;
             }
             else if (input == LEFT || input == ConsoleKey.LeftArrow)
             {
-                x--;
+                deltaX = -1;
             }
             else if (input == RIGHT || input == ConsoleKey.RightArrow)
             {
-                x++;
+                deltaX = +1;
             }
 
-            if (map.IsObjectSolid(x, y) == true)
+            GetFuturePosition();
+
+            if (map.IsObjectSolid(futureX, futureY) == true)
             {
                 Console.Beep(250, 33);
-                RecallLastPosition();
+                canMoveThere = false;
             }
 
             if (IsGameCharacter(this, enemy))
@@ -47,8 +50,10 @@ namespace Test_Based_RPG
                 Console.Beep(400, 33);
                 Console.Beep(500, 33);
                 enemy.TakeDamage();
-                RecallLastPosition();
+                canMoveThere = false;
             }
+
+            Move();
         }
 
        

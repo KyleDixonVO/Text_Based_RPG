@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.IO;
 
 namespace Test_Based_RPG
 {
@@ -11,47 +12,52 @@ namespace Test_Based_RPG
         private int rows;
         private int columns;
         private bool hasMapInitialized = false;
-        private char[,] mapTiles = new char[,]
+        private char[,] mapTiles;
+        //= new char[,]
+        //{
+        //    {'╔','═','═','═','═','═','═','═','═','═','═','═','═','═','═','═','═','═','═','═','═','═','═','═','═','═','═','═','═','╗'},
+        //    {'║','^',' ',' ',' ',' ','*','*',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ','~','~','~',' ',' ','║'},
+        //    {'║','^',' ',' ',' ','*','*',' ',' ',' ',' ',' ',' ',' ',' ',' ','*',' ',' ',' ',' ',' ','~','~','~',' ',' ',' ',' ','║'},
+        //    {'║',' ',' ',' ',' ',' ',' ',' ',' ',' ','*',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ','║'},
+        //    {'║',' ',' ',' ','~','~','~',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ','║'},
+        //    {'║',' ',' ',' ','~','~','~','~','~',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ','^',' ',' ',' ',' ',' ',' ','║'},
+        //    {'║',' ',' ','~','~','~','~','~','~','~','~','~','~',' ',' ',' ',' ',' ',' ',' ',' ','^','^','^',' ',' ',' ',' ',' ','║'},
+        //    {'║',' ',' ',' ','~','~','~','~','~','~',' ',' ',' ','~','~','~',' ',' ',' ','^','^','^','^','^','^',' ',' ',' ',' ','║'},
+        //    {'║',' ',' ','*',' ','~','~','~','~',' ',' ',' ',' ',' ',' ',' ',' ',' ','^','^','^','^','^','^','^','^','^',' ',' ','║'},
+        //    {'║',' ',' ',' ',' ',' ',' ','~','~',' ','*',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ','*','║'},
+        //    {'║',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ','*',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ','*','*','║'},
+        //    {'╚','═','═','═','═','═','═','═','═','═','═','═','═','═','═','═','═','═','═','═','═','═','═','═','═','═','═','═','═','╝'},
+        //};
+
+        private string[] dataFromFile;
+        private char[] charsFromFile;
+        public char[][] tilesFromFile;
+        public void Update(Player player, ref Tracker tracker)
         {
-            {'╔','═','═','═','═','═','═','═','═','═','═','═','═','═','═','═','═','═','═','═','═','═','═','═','═','═','═','═','═','╗'},
-            {'║','^',' ',' ',' ',' ','*','*',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ','~','~','~',' ',' ','║'},
-            {'║','^',' ',' ',' ','*','*',' ',' ',' ',' ',' ',' ',' ',' ',' ','*',' ',' ',' ',' ',' ','~','~','~',' ',' ',' ',' ','║'},
-            {'║',' ',' ',' ',' ',' ',' ',' ',' ',' ','*',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ','║'},
-            {'║',' ',' ',' ','~','~','~',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ','║'},
-            {'║',' ',' ',' ','~','~','~','~','~',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ','^',' ',' ',' ',' ',' ',' ','║'},
-            {'║',' ',' ','~','~','~','~','~','~','~','~','~','~',' ',' ',' ',' ',' ',' ',' ',' ','^','^','^',' ',' ',' ',' ',' ','║'},
-            {'║',' ',' ',' ','~','~','~','~','~','~',' ',' ',' ','~','~','~',' ',' ',' ','^','^','^','^','^','^',' ',' ',' ',' ','║'},
-            {'║',' ',' ','*',' ','~','~','~','~',' ',' ',' ',' ',' ',' ',' ',' ',' ','^','^','^','^','^','^','^','^','^',' ',' ','║'},
-            {'║',' ',' ',' ',' ',' ',' ','~','~',' ','*',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ','*','║'},
-            {'║',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ','*',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ','*','*','║'},
-            {'╚','═','═','═','═','═','═','═','═','═','═','═','═','═','═','═','═','═','═','═','═','═','═','═','═','═','═','═','═','╝'},
-        };
-        public void Update(Player player, ref Enemy enemy)
-        {
-            DrawMap(player, enemy);
-            DrawEntities(player, ref enemy);
+            DrawMap(player, tracker);
+            DrawEntities(player, ref tracker);
         }
 
-        private void DrawEntities(Player player, ref Enemy enemy)
+        private void DrawEntities(Player player, ref Tracker tracker)
         {
             //drawing player
             Console.SetCursorPosition(player.x, player.y);
             Console.Write(player.avatar);
 
             //drawing enemy
-            if (enemy == null)return;
+            if (tracker == null)return;
             
-            if (enemy.dead == false)
+            if (tracker.dead == false)
             {
-                Console.SetCursorPosition(enemy.x, enemy.y);
-                Console.Write(enemy.avatar);
+                Console.SetCursorPosition(tracker.x, tracker.y);
+                Console.Write(tracker.avatar);
             }
             else
             {
-                enemy.avatar = ' ';
-                Console.SetCursorPosition(enemy.x, enemy.y);
-                Console.Write(enemy.avatar);
-                enemy = null;
+                tracker.avatar = ' ';
+                Console.SetCursorPosition(tracker.x, tracker.y);
+                Console.Write(tracker.avatar);
+                tracker = null;
             }
             
         }
@@ -60,13 +66,13 @@ namespace Test_Based_RPG
 
         private void SetBounds()
         {
-            rows = mapTiles.GetUpperBound(0) + 1;
-            columns = mapTiles.GetUpperBound(1) + 1;
+            //rows = mapTiles.GetUpperBound(0) + 1;
+            //columns = mapTiles.GetUpperBound(1) + 1;
             Console.SetWindowSize((columns), (columns));
             Console.SetBufferSize((columns), (columns));
         }
 
-        private void DrawMap(Player player, Enemy enemy)
+        private void DrawMap(Player player, Tracker tracker)
         {
             Console.SetCursorPosition(0, 0);
             if (hasMapInitialized == false)
@@ -74,7 +80,7 @@ namespace Test_Based_RPG
                 SetBounds();
                 for (int i = 0; i < rows; i++)
                 {
-                    Console.Write("\r");
+                    //Console.Write("\r");
                     for (int j = 0; j < columns; j++)
                     {
                         SetTileColor(i, j);
@@ -82,16 +88,16 @@ namespace Test_Based_RPG
                         Console.ResetColor();
                     }
                 }
-                Console.Write("\r");
+                //Console.Write("\r");
             }
             hasMapInitialized = true;
 
-            Console.SetCursorPosition(player.LastX, player.LastY);
-            Console.Write(mapTiles[player.LastY, player.LastX]);
-            if (enemy != null)
+            Console.SetCursorPosition(player.lastX, player.lastY);
+            Console.Write(mapTiles[player.lastY, player.lastX]);
+            if (tracker!= null)
             {
-                Console.SetCursorPosition(enemy.LastX, enemy.LastY);
-                Console.Write(mapTiles[enemy.LastY, enemy.LastX]);
+                Console.SetCursorPosition(tracker.lastX, tracker.lastY);
+                Console.Write(mapTiles[tracker.lastY, tracker.lastX]);
             }
         }
 
@@ -121,6 +127,28 @@ namespace Test_Based_RPG
             else
             {
                 Console.ForegroundColor = ConsoleColor.White;
+            }
+        }
+
+        public void GetMapData()
+        {
+            if(!File.Exists("mapData.txt"))
+            {
+                Console.WriteLine("mapData.txt cannot be found. Ensure mapData has not been moved or renamed.");
+                Console.ReadKey(true);
+            }
+            else
+            {
+                dataFromFile = File.ReadLines("mapData.txt").ToArray();
+                mapTiles = new char[dataFromFile.Length, dataFromFile[0].Length];
+                for (int i = 0; i < dataFromFile.Length; i++)
+                {
+                    charsFromFile = dataFromFile[i].ToCharArray();
+                    for (int j = 0; j < charsFromFile.Length; j++)
+                    {
+                        mapTiles[i,j] = charsFromFile[j];  
+                    }  
+                }
             }
         }
     }
