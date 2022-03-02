@@ -14,8 +14,9 @@ namespace Test_Based_RPG
         private readonly ConsoleKey LEFT = ConsoleKey.A;
         private readonly ConsoleKey RIGHT = ConsoleKey.D;
         public new char avatar = '@';
+        public int playerDamage = 1;
 
-        public void CalculateMovement(Map map, Enemy enemy)
+        public void CalculateMovement(Map map, ref Tracker tracker, ref Spaz spaz, ref Sentinel sentinel)
         {
             SaveLastPosition();
             canMoveThere = true;
@@ -45,13 +46,33 @@ namespace Test_Based_RPG
                 canMoveThere = false;
             }
 
-            if (IsGameCharacter(this, enemy))
+            
+            //detects collisions between player and enemies, will later be handled by enemy manager
+            if (IsGameCharacter(this, tracker))
             {
                 Console.Beep(400, 33);
                 Console.Beep(500, 33);
-                enemy.TakeDamage();
+                tracker.TakeDamage(playerDamage);
                 canMoveThere = false;
+                tracker.ShowStats(tracker.avatar);
             }
+            else if (IsGameCharacter(this, spaz))
+            {
+                Console.Beep(400, 33);
+                Console.Beep(500, 33);
+                spaz.TakeDamage(playerDamage);
+                canMoveThere = false;
+                spaz.ShowStats(spaz.avatar);
+            }
+            else if (IsGameCharacter(this, sentinel))
+            {
+                Console.Beep(400, 33);
+                Console.Beep(500, 33);
+                sentinel.TakeDamage(playerDamage);
+                canMoveThere = false;
+                sentinel.ShowStats(sentinel.avatar);
+            }
+
 
             Move();
         }

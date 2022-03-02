@@ -39,7 +39,7 @@ namespace Test_Based_RPG
             }
         }
 
-        public new void ShowStats()
+        public void ShowStats(char avatar)
         {
             Console.ForegroundColor = ConsoleColor.Black;
             Console.BackgroundColor = ConsoleColor.Red;

@@ -8,11 +8,22 @@ namespace Test_Based_RPG
 {
     class Spaz : Enemy
     {
-        public void CalculateMovement(Map map, Player player)
+        private Random rd = new Random();
+
+        public Spaz()
+        {
+            damage = 3;
+            avatar = 'Z';
+            health = 2;
+            maxHealth = health;
+            x = 5;
+            y = 7;
+        }
+
+        public void CalculateMovement(Map map, Player player, Enemy enemy, Enemy enemy1)
         {
             SaveLastPosition();
             canMoveThere = true;
-            Random rd = new Random();
             int moveDirection = rd.Next(0,3);
             if (moveDirection == 0)
             {
@@ -38,11 +49,17 @@ namespace Test_Based_RPG
                 canMoveThere = false;
             }
 
-            if (IsGameCharacter(player, this) == true)
+            if (IsGameCharacter(this, player) == true)
             {
                 Console.Beep(200, 33);
                 Console.Beep(100, 33);
-                player.TakeDamage();
+                player.TakeDamage(damage);
+                canMoveThere = false;
+                this.ShowStats(avatar);
+            }
+
+            if (IsGameCharacter(this, enemy) == true || IsGameCharacter(this, enemy1) == true)
+            {
                 canMoveThere = false;
             }
 

@@ -16,6 +16,7 @@ namespace Test_Based_RPG
         public int lastY;
         public int health = 5;
         public int maxHealth = 5;
+        public int damage = 1;
         public bool dead = false;
         public bool canMoveThere;
 
@@ -28,9 +29,9 @@ namespace Test_Based_RPG
             avatar = setAvatar;
         }
 
-        public void TakeDamage()
+        public void TakeDamage(int damage)
         {
-            health--;
+            health -= damage;
 
             if (health <= 0)
             {
@@ -48,11 +49,11 @@ namespace Test_Based_RPG
             Console.ResetColor();
         }
 
-        protected bool IsGameCharacter(Player player, Enemy enemy)
+        protected bool IsGameCharacter(GameCharacter gameCharacter, GameCharacter gameCharacter1)
         {
-            if (enemy == null) return false; 
+            if (gameCharacter == null || gameCharacter1 == null) return false; 
             
-            if ((player.futureX == enemy.x && player.futureY == enemy.y) || (player.x == enemy.futureX && player.y == enemy.futureY))
+            if ((gameCharacter.futureX == gameCharacter1.x && gameCharacter.futureY == gameCharacter1.y)) //|| (gameCharacter.x == gameCharacter1.futureX && gameCharacter.y == gameCharacter1.futureY))
             {
                 return true;
             }

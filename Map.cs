@@ -13,41 +13,24 @@ namespace Test_Based_RPG
         private int columns;
         private bool hasMapInitialized = false;
         private char[,] mapTiles;
-        //= new char[,]
-        //{
-        //    {'╔','═','═','═','═','═','═','═','═','═','═','═','═','═','═','═','═','═','═','═','═','═','═','═','═','═','═','═','═','╗'},
-        //    {'║','^',' ',' ',' ',' ','*','*',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ','~','~','~',' ',' ','║'},
-        //    {'║','^',' ',' ',' ','*','*',' ',' ',' ',' ',' ',' ',' ',' ',' ','*',' ',' ',' ',' ',' ','~','~','~',' ',' ',' ',' ','║'},
-        //    {'║',' ',' ',' ',' ',' ',' ',' ',' ',' ','*',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ','║'},
-        //    {'║',' ',' ',' ','~','~','~',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ','║'},
-        //    {'║',' ',' ',' ','~','~','~','~','~',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ','^',' ',' ',' ',' ',' ',' ','║'},
-        //    {'║',' ',' ','~','~','~','~','~','~','~','~','~','~',' ',' ',' ',' ',' ',' ',' ',' ','^','^','^',' ',' ',' ',' ',' ','║'},
-        //    {'║',' ',' ',' ','~','~','~','~','~','~',' ',' ',' ','~','~','~',' ',' ',' ','^','^','^','^','^','^',' ',' ',' ',' ','║'},
-        //    {'║',' ',' ','*',' ','~','~','~','~',' ',' ',' ',' ',' ',' ',' ',' ',' ','^','^','^','^','^','^','^','^','^',' ',' ','║'},
-        //    {'║',' ',' ',' ',' ',' ',' ','~','~',' ','*',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ','*','║'},
-        //    {'║',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ','*',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ','*','*','║'},
-        //    {'╚','═','═','═','═','═','═','═','═','═','═','═','═','═','═','═','═','═','═','═','═','═','═','═','═','═','═','═','═','╝'},
-        //};
 
         private string[] dataFromFile;
         private char[] charsFromFile;
-        public char[][] tilesFromFile;
-        public void Update(Player player, ref Tracker tracker)
+        public void Update(Player player, ref Tracker tracker, ref Spaz spaz, ref Sentinel sentinel)
         {
-            DrawMap(player, tracker);
-            DrawEntities(player, ref tracker);
+            DrawMap(player, tracker, spaz, sentinel);
+            DrawEntities(player, ref tracker, ref spaz, ref sentinel);
         }
 
-        private void DrawEntities(Player player, ref Tracker tracker)
+        private void DrawEntities(Player player, ref Tracker tracker, ref Spaz spaz, ref Sentinel sentinel)
         {
             //drawing player
             Console.SetCursorPosition(player.x, player.y);
             Console.Write(player.avatar);
 
             //drawing enemy
-            if (tracker == null)return;
-            
-            if (tracker.dead == false)
+            if (tracker == null) { }
+            else if (tracker.dead == false)
             {
                 Console.SetCursorPosition(tracker.x, tracker.y);
                 Console.Write(tracker.avatar);
@@ -59,7 +42,36 @@ namespace Test_Based_RPG
                 Console.Write(tracker.avatar);
                 tracker = null;
             }
-            
+
+            //drawing enemy
+            if (spaz == null) { }
+            else if (spaz.dead == false)
+            {
+                Console.SetCursorPosition(spaz.x, spaz.y);
+                Console.Write(spaz.avatar);
+            }
+            else
+            {
+                spaz.avatar = ' ';
+                Console.SetCursorPosition(spaz.x, spaz.y);
+                Console.Write(spaz.avatar);
+                spaz = null;
+            }
+
+            //drawing enemy
+            if (sentinel == null) { }
+            else if (sentinel.dead == false)
+            {
+                Console.SetCursorPosition(sentinel.x, sentinel.y);
+                Console.Write(sentinel.avatar);
+            }
+            else
+            {
+                sentinel.avatar = ' ';
+                Console.SetCursorPosition(sentinel.x, sentinel.y);
+                Console.Write(sentinel.avatar);
+                sentinel = null;
+            }
         }
 
         
@@ -72,7 +84,7 @@ namespace Test_Based_RPG
             Console.SetBufferSize((columns), (columns));
         }
 
-        private void DrawMap(Player player, Tracker tracker)
+        private void DrawMap(Player player, Tracker tracker, Spaz spaz, Sentinel sentinel)
         {
             Console.SetCursorPosition(0, 0);
             if (hasMapInitialized == false)
@@ -98,6 +110,18 @@ namespace Test_Based_RPG
             {
                 Console.SetCursorPosition(tracker.lastX, tracker.lastY);
                 Console.Write(mapTiles[tracker.lastY, tracker.lastX]);
+            }
+
+            if (spaz != null)
+            {
+                Console.SetCursorPosition(spaz.lastX, spaz.lastY);
+                Console.Write(mapTiles[spaz.lastY, spaz.lastX]);
+            }
+
+            if (sentinel != null)
+            {
+                Console.SetCursorPosition(sentinel.lastX, sentinel.lastY);
+                Console.Write(mapTiles[sentinel.lastY, sentinel.lastX]);
             }
         }
 
@@ -150,6 +174,9 @@ namespace Test_Based_RPG
                     }  
                 }
             }
+
+            rows = mapTiles.GetLength(0);
+            columns = mapTiles.GetLength(1);
         }
     }
 }

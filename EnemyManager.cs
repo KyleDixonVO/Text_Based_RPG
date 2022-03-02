@@ -10,7 +10,7 @@ namespace Test_Based_RPG
     {
         //handles creating and nulling of enemies
         public int maxEnemies = 10;
-        public List<Enemy> enemies;
+        public List<Enemy> enemies = new List<Enemy>();
         public int[] enemyTypes = new int[3];
 
         public void CreateEnemies()

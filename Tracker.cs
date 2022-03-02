@@ -10,9 +10,18 @@ namespace Test_Based_RPG
     {
         private int trackingY;
         private int trackingX;
-        public new char avatar = 'T';
 
-        public void CalculateMovement(Map map, Player player)
+        public Tracker()
+        {
+            damage = 1;
+            avatar = 'T';
+            health = 5;
+            maxHealth = health;
+            x = 5;
+            y = 10;
+        }
+
+        public void CalculateMovement(Map map, Player player, Enemy enemy, Enemy enemy1)
         {
 
             
@@ -55,13 +64,19 @@ namespace Test_Based_RPG
                 }
 
                 //detecting collision with player
-                if (IsGameCharacter(player, this))
+                if (IsGameCharacter(this, player))
                 {
                     Console.Beep(200, 33);
                     Console.Beep(100, 33);
-                    player.TakeDamage();
+                    player.TakeDamage(damage);
                     canMoveThere = false;
                     playerHit = true;
+                    this.ShowStats(avatar);
+                }
+
+                if (IsGameCharacter(this, enemy) == true || IsGameCharacter(this, enemy1) == true)
+                {
+                    canMoveThere = false;
                 }
 
                 Move();
