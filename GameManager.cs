@@ -14,6 +14,9 @@ namespace Test_Based_RPG
         public Tracker tracker;
         public Spaz spaz;
         public Sentinel sentinel;
+        public Medkit medkit;
+        public PowerUp powerUp;
+        public Money money;
         public void InitializeGame()
         {
             //On game launch
@@ -22,25 +25,35 @@ namespace Test_Based_RPG
             //enemyManager = new EnemyManager();
             //enemyManager.CreateEnemies();
             player = new Player();
-            player.Initialize(15, 10, 10, player.avatar);
             tracker = new Tracker();
             //tracker.Initialize(3, 10, 5, tracker.avatar);
             spaz = new Spaz();
             sentinel = new Sentinel();
+            medkit = new Medkit();
+            powerUp = new PowerUp();
+            money = new Money();
             
             player.ShowStats();
             Console.CursorVisible = false;
         }
 
-        public void GameLoop(Player player, ref Tracker tracker, ref Spaz spaz, ref Sentinel sentinel, Map map)
+        public void GameLoop(Player player, ref Tracker tracker, ref Spaz spaz, ref Sentinel sentinel, Map map, Medkit medkit, PowerUp powerUp, Money money)
         {
             //Game Loop
             while (player.dead == false)
             {
-                map.Update(player, ref tracker, ref spaz, ref sentinel);
+                player.ShowStats();
+                player.ShowInventory(map);
+                map.Update(player, ref tracker, ref spaz, ref sentinel, medkit, powerUp, money);
                 player.CalculateMovement(map, ref tracker,  ref spaz, ref sentinel);
+                medkit.HealOnContact(player);
+                powerUp.PowerUpOnContact(player);
+                money.PickUpOnContact(player);
 
-                map.Update(player, ref tracker, ref spaz, ref sentinel);
+                player.ShowStats();
+                player.ShowInventory(map);
+
+                map.Update(player, ref tracker, ref spaz, ref sentinel, medkit, powerUp, money);
                 if (tracker != null)
                 {
                     tracker.CalculateMovement(map, player, spaz, sentinel);
@@ -55,9 +68,6 @@ namespace Test_Based_RPG
                 {
                     sentinel.CalculateMovement(map, player, tracker, sentinel);
                 }
-
-
-                player.ShowStats();
             }
         }
 
@@ -75,7 +85,7 @@ namespace Test_Based_RPG
         public void LaunchGame()
         {
             InitializeGame();
-            GameLoop(player, ref tracker, ref spaz, ref sentinel, map);
+            GameLoop(player, ref tracker, ref spaz, ref sentinel, map, medkit, powerUp, money);
             EndGame();
         }
     }

@@ -9,31 +9,58 @@ namespace Test_Based_RPG
 {
     class Map
     {
-        private int rows;
-        private int columns;
+        public int rows;
+        public int columns;
         private bool hasMapInitialized = false;
         private char[,] mapTiles;
 
         private string[] dataFromFile;
         private char[] charsFromFile;
-        public void Update(Player player, ref Tracker tracker, ref Spaz spaz, ref Sentinel sentinel)
+        public void Update(Player player, ref Tracker tracker, ref Spaz spaz, ref Sentinel sentinel, Medkit medkit, PowerUp powerUp, Money money)
         {
             DrawMap(player, tracker, spaz, sentinel);
-            DrawEntities(player, ref tracker, ref spaz, ref sentinel);
+            DrawEntities(player, ref tracker, ref spaz, ref sentinel, medkit, powerUp, money);
         }
 
-        private void DrawEntities(Player player, ref Tracker tracker, ref Spaz spaz, ref Sentinel sentinel)
+        private void DrawEntities(Player player, ref Tracker tracker, ref Spaz spaz, ref Sentinel sentinel, Medkit medkit, PowerUp powerUp, Money money)
         {
             //drawing player
             Console.SetCursorPosition(player.x, player.y);
             Console.Write(player.avatar);
 
+            if (medkit.usedPack == false)
+            {
+                
+                Console.SetCursorPosition(medkit.x, medkit.y);
+                Console.BackgroundColor = ConsoleColor.Red;
+                Console.Write(medkit.avatar);
+                Console.ResetColor();
+            }   
+
+            if (powerUp.usedPowerUp == false)
+            {
+                Console.SetCursorPosition(powerUp.x, powerUp.y);
+                Console.BackgroundColor = ConsoleColor.Blue;
+                Console.Write(powerUp.avatar);
+                Console.ResetColor();
+            }
+
+            if (money.obtained == false)
+            {
+                Console.SetCursorPosition(money.x, money.y);
+                Console.BackgroundColor = ConsoleColor.DarkGreen;
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.Write(money.avatar);
+                Console.ResetColor();
+            }
             //drawing enemy
             if (tracker == null) { }
             else if (tracker.dead == false)
             {
                 Console.SetCursorPosition(tracker.x, tracker.y);
+                Console.ForegroundColor = ConsoleColor.Red;
                 Console.Write(tracker.avatar);
+                Console.ResetColor();
             }
             else
             {
@@ -48,7 +75,9 @@ namespace Test_Based_RPG
             else if (spaz.dead == false)
             {
                 Console.SetCursorPosition(spaz.x, spaz.y);
+                Console.ForegroundColor = ConsoleColor.Red;
                 Console.Write(spaz.avatar);
+                Console.ResetColor();
             }
             else
             {
@@ -63,7 +92,9 @@ namespace Test_Based_RPG
             else if (sentinel.dead == false)
             {
                 Console.SetCursorPosition(sentinel.x, sentinel.y);
+                Console.ForegroundColor = ConsoleColor.Red;
                 Console.Write(sentinel.avatar);
+                Console.ResetColor();
             }
             else
             {
@@ -78,10 +109,8 @@ namespace Test_Based_RPG
 
         private void SetBounds()
         {
-            //rows = mapTiles.GetUpperBound(0) + 1;
-            //columns = mapTiles.GetUpperBound(1) + 1;
-            Console.SetWindowSize((columns), (columns));
-            Console.SetBufferSize((columns), (columns));
+            Console.SetWindowSize((columns * 2), (rows*2));
+            Console.SetBufferSize((columns * 2), (rows *2));
         }
 
         private void DrawMap(Player player, Tracker tracker, Spaz spaz, Sentinel sentinel)
@@ -89,10 +118,11 @@ namespace Test_Based_RPG
             Console.SetCursorPosition(0, 0);
             if (hasMapInitialized == false)
             {
+                Console.SetCursorPosition(0, 0);
                 SetBounds();
                 for (int i = 0; i < rows; i++)
                 {
-                    //Console.Write("\r");
+                    if (i != 0) { Console.Write("\r\n"); }
                     for (int j = 0; j < columns; j++)
                     {
                         SetTileColor(i, j);
@@ -100,7 +130,7 @@ namespace Test_Based_RPG
                         Console.ResetColor();
                     }
                 }
-                //Console.Write("\r");
+                Console.Write("\r\n");
             }
             hasMapInitialized = true;
 

@@ -13,9 +13,17 @@ namespace Test_Based_RPG
         private readonly ConsoleKey DOWN = ConsoleKey.S;
         private readonly ConsoleKey LEFT = ConsoleKey.A;
         private readonly ConsoleKey RIGHT = ConsoleKey.D;
-        public new char avatar = '@';
-        public int playerDamage = 1;
-
+        public int money;
+        public Player()
+        {
+            damage = 1;
+            health = 15;
+            maxHealth = health;
+            x = 10;
+            y = 10;
+            avatar = '@';
+            money = 0;
+        }
         public void CalculateMovement(Map map, ref Tracker tracker, ref Spaz spaz, ref Sentinel sentinel)
         {
             SaveLastPosition();
@@ -52,7 +60,7 @@ namespace Test_Based_RPG
             {
                 Console.Beep(400, 33);
                 Console.Beep(500, 33);
-                tracker.TakeDamage(playerDamage);
+                tracker.TakeDamage(damage);
                 canMoveThere = false;
                 tracker.ShowStats(tracker.avatar);
             }
@@ -60,7 +68,7 @@ namespace Test_Based_RPG
             {
                 Console.Beep(400, 33);
                 Console.Beep(500, 33);
-                spaz.TakeDamage(playerDamage);
+                spaz.TakeDamage(damage);
                 canMoveThere = false;
                 spaz.ShowStats(spaz.avatar);
             }
@@ -68,13 +76,21 @@ namespace Test_Based_RPG
             {
                 Console.Beep(400, 33);
                 Console.Beep(500, 33);
-                sentinel.TakeDamage(playerDamage);
+                sentinel.TakeDamage(damage);
                 canMoveThere = false;
                 sentinel.ShowStats(sentinel.avatar);
             }
 
 
             Move();
+        }
+
+        public void ShowInventory(Map map)
+        {
+            Console.SetCursorPosition(map.columns + 5, 0);
+            Console.Write("Player Inventory: ");
+            Console.SetCursorPosition(map.columns + 5, 1);
+            Console.Write("Money: " + money);   
         }
 
        
