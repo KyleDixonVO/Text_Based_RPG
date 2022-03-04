@@ -16,13 +16,13 @@ namespace Test_Based_RPG
 
         private string[] dataFromFile;
         private char[] charsFromFile;
-        public void Update(Player player, ref Tracker tracker, ref Spaz spaz, ref Sentinel sentinel, Medkit medkit, PowerUp powerUp, Money money)
+        public void Update(Player player, ref Tracker tracker, ref Spaz spaz, ref Sentinel sentinel, Medkit medkit, PowerUp powerUp, Money money, Key key, Door door)
         {
             DrawMap(player, tracker, spaz, sentinel);
-            DrawEntities(player, ref tracker, ref spaz, ref sentinel, medkit, powerUp, money);
+            DrawEntities(player, ref tracker, ref spaz, ref sentinel, medkit, powerUp, money, key, door);
         }
 
-        private void DrawEntities(Player player, ref Tracker tracker, ref Spaz spaz, ref Sentinel sentinel, Medkit medkit, PowerUp powerUp, Money money)
+        private void DrawEntities(Player player, ref Tracker tracker, ref Spaz spaz, ref Sentinel sentinel, Medkit medkit, PowerUp powerUp, Money money, Key key, Door door)
         {
             //drawing player
             Console.SetCursorPosition(player.x, player.y);
@@ -53,6 +53,25 @@ namespace Test_Based_RPG
                 Console.Write(money.avatar);
                 Console.ResetColor();
             }
+
+            if (key.obtained == false)
+            {
+                Console.SetCursorPosition(key.x, key.y);
+                Console.BackgroundColor = ConsoleColor.Yellow;
+                Console.ForegroundColor = ConsoleColor.DarkYellow;
+                Console.Write(key.avatar);
+                Console.ResetColor();
+            }
+
+            if (door.doorOpened == false)
+            {
+                Console.SetCursorPosition(door.x, door.y);
+                Console.BackgroundColor = ConsoleColor.DarkYellow;
+                Console.ForegroundColor = ConsoleColor.Yellow;
+                Console.Write(door.avatar);
+                Console.ResetColor();
+            }
+
             //drawing enemy
             if (tracker == null) { }
             else if (tracker.dead == false)
@@ -166,17 +185,21 @@ namespace Test_Based_RPG
 
         private void SetTileColor(int i, int j)
         {
-            if (mapTiles[i,j] == '^')
+            if (mapTiles[i, j] == '^')
             {
                 Console.ForegroundColor = ConsoleColor.DarkGray;
             }
-            else if (mapTiles[i,j] == '~')
+            else if (mapTiles[i, j] == '~')
             {
                 Console.ForegroundColor = ConsoleColor.Blue;
             }
-            else if (mapTiles[i,j] == '*')
+            else if (mapTiles[i, j] == '*')
             {
                 Console.ForegroundColor = ConsoleColor.DarkGreen;
+            }
+            else if (mapTiles[i, j] == ',')
+            {
+                Console.ForegroundColor = ConsoleColor.Green;
             }
             else
             {

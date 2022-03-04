@@ -12,13 +12,14 @@ namespace Test_Based_RPG
         public int maxEnemies = 10;
         public List<Enemy> enemies = new List<Enemy>();
         public int[] enemyTypes = new int[3];
+        private Random rd = new Random();
+        private int randomType;
 
         public void CreateEnemies()
         {
             for (int i = 0; i < maxEnemies; i++)
             {
-                Random rd = new Random();
-                int randomType = rd.Next(0, 2);
+                randomType = rd.Next(0, 2);
                 if (randomType == 0)
                 {
                     Tracker tracker = new Tracker();

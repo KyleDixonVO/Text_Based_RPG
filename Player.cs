@@ -13,6 +13,7 @@ namespace Test_Based_RPG
         private readonly ConsoleKey DOWN = ConsoleKey.S;
         private readonly ConsoleKey LEFT = ConsoleKey.A;
         private readonly ConsoleKey RIGHT = ConsoleKey.D;
+        public List<Item> Inventory;
         public int money;
         public Player()
         {
@@ -23,6 +24,7 @@ namespace Test_Based_RPG
             y = 10;
             avatar = '@';
             money = 0;
+            Inventory = new List<Item>();
         }
         public void CalculateMovement(Map map, ref Tracker tracker, ref Spaz spaz, ref Sentinel sentinel)
         {
@@ -88,9 +90,16 @@ namespace Test_Based_RPG
         public void ShowInventory(Map map)
         {
             Console.SetCursorPosition(map.columns + 5, 0);
-            Console.Write("Player Inventory: ");
+            Console.Write("Money: " + money);
             Console.SetCursorPosition(map.columns + 5, 1);
-            Console.Write("Money: " + money);   
+            Console.Write("Player Inventory: ");
+            int i = 2;
+            foreach (Item item in Inventory)
+            {
+                Console.SetCursorPosition(map.columns + 5, i);
+                Console.Write(item.name);
+                i++;
+            }
         }
 
        
