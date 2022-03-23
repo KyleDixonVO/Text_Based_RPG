@@ -16,51 +16,29 @@ namespace Test_Based_RPG
 
         private string[] dataFromFile;
         private char[] charsFromFile;
-        public void Update(Player player, ref Tracker tracker, ref Spaz spaz, ref Sentinel sentinel, Medkit medkit, PowerUp powerUp, Money money, Key key, Door door)
+        public void Update(Player player, EnemyManager enemyManager, ItemManager itemManager, Door door)
         {
-            DrawMap(player, tracker, spaz, sentinel);
-            DrawEntities(player, ref tracker, ref spaz, ref sentinel, medkit, powerUp, money, key, door);
+            DrawMap(player, enemyManager);
+            DrawEntities(player, enemyManager, itemManager, door);
         }
 
-        private void DrawEntities(Player player, ref Tracker tracker, ref Spaz spaz, ref Sentinel sentinel, Medkit medkit, PowerUp powerUp, Money money, Key key, Door door)
+        private void DrawEntities(Player player, EnemyManager enemyManager, ItemManager itemManager, Door door)
         {
             //drawing player
             Console.SetCursorPosition(player.x, player.y);
             Console.Write(player.avatar);
 
-            if (medkit.usedPack == false)
+            for (int i = 0; i < itemManager.items.Length; i++)
             {
-                
-                Console.SetCursorPosition(medkit.x, medkit.y);
-                Console.BackgroundColor = ConsoleColor.Red;
-                Console.Write(medkit.avatar);
-                Console.ResetColor();
-            }   
-
-            if (powerUp.usedPowerUp == false)
-            {
-                Console.SetCursorPosition(powerUp.x, powerUp.y);
-                Console.BackgroundColor = ConsoleColor.Blue;
-                Console.Write(powerUp.avatar);
-                Console.ResetColor();
-            }
-
-            if (money.obtained == false)
-            {
-                Console.SetCursorPosition(money.x, money.y);
-                Console.BackgroundColor = ConsoleColor.DarkGreen;
-                Console.ForegroundColor = ConsoleColor.Green;
-                Console.Write(money.avatar);
-                Console.ResetColor();
-            }
-
-            if (key.obtained == false)
-            {
-                Console.SetCursorPosition(key.x, key.y);
-                Console.BackgroundColor = ConsoleColor.Yellow;
-                Console.ForegroundColor = ConsoleColor.DarkYellow;
-                Console.Write(key.avatar);
-                Console.ResetColor();
+                Console.SetCursorPosition(itemManager.items[i].x, itemManager.items[i].y);
+                if (itemManager.items[i].used == false)
+                {
+                    Console.Write(itemManager.items[i].avatar);
+                }
+                else
+                {
+                    Console.Write(' ');
+                }
             }
 
             if (door.doorOpened == false)
@@ -73,54 +51,25 @@ namespace Test_Based_RPG
             }
 
             //drawing enemy
-            if (tracker == null) { }
-            else if (tracker.dead == false)
+            for (int k = 0; k < enemyManager.enemies.Length; k++)
             {
-                Console.SetCursorPosition(tracker.x, tracker.y);
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.Write(tracker.avatar);
-                Console.ResetColor();
-            }
-            else
-            {
-                tracker.avatar = ' ';
-                Console.SetCursorPosition(tracker.x, tracker.y);
-                Console.Write(tracker.avatar);
-                tracker = null;
-            }
-
-            //drawing enemy
-            if (spaz == null) { }
-            else if (spaz.dead == false)
-            {
-                Console.SetCursorPosition(spaz.x, spaz.y);
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.Write(spaz.avatar);
-                Console.ResetColor();
-            }
-            else
-            {
-                spaz.avatar = ' ';
-                Console.SetCursorPosition(spaz.x, spaz.y);
-                Console.Write(spaz.avatar);
-                spaz = null;
-            }
-
-            //drawing enemy
-            if (sentinel == null) { }
-            else if (sentinel.dead == false)
-            {
-                Console.SetCursorPosition(sentinel.x, sentinel.y);
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.Write(sentinel.avatar);
-                Console.ResetColor();
-            }
-            else
-            {
-                sentinel.avatar = ' ';
-                Console.SetCursorPosition(sentinel.x, sentinel.y);
-                Console.Write(sentinel.avatar);
-                sentinel = null;
+                if (enemyManager.enemies[k] != null)
+                {
+                    if (enemyManager.enemies[k].dead == false)
+                    {
+                        Console.SetCursorPosition(enemyManager.enemies[k].x, enemyManager.enemies[k].y);
+                        Console.ForegroundColor = ConsoleColor.Red;
+                        Console.Write(enemyManager.enemies[k].avatar);
+                        Console.ResetColor();
+                    }
+                    else
+                    {
+                        enemyManager.enemies[k].avatar = ' ';
+                        Console.SetCursorPosition(enemyManager.enemies[k].x, enemyManager.enemies[k].y);
+                        Console.Write(enemyManager.enemies[k].avatar);
+                        enemyManager.enemies[k] = null;
+                    }
+                }
             }
         }
 
@@ -132,7 +81,7 @@ namespace Test_Based_RPG
             Console.SetBufferSize((columns * 2), (rows *2));
         }
 
-        private void DrawMap(Player player, Tracker tracker, Spaz spaz, Sentinel sentinel)
+        private void DrawMap(Player player, EnemyManager enemyManager)
         {
             Console.SetCursorPosition(0, 0);
             if (hasMapInitialized == false)
@@ -155,22 +104,14 @@ namespace Test_Based_RPG
 
             Console.SetCursorPosition(player.lastX, player.lastY);
             Console.Write(mapTiles[player.lastY, player.lastX]);
-            if (tracker!= null)
+            
+            for (int k = 0; k < enemyManager.enemies.Length; k++)
             {
-                Console.SetCursorPosition(tracker.lastX, tracker.lastY);
-                Console.Write(mapTiles[tracker.lastY, tracker.lastX]);
-            }
-
-            if (spaz != null)
-            {
-                Console.SetCursorPosition(spaz.lastX, spaz.lastY);
-                Console.Write(mapTiles[spaz.lastY, spaz.lastX]);
-            }
-
-            if (sentinel != null)
-            {
-                Console.SetCursorPosition(sentinel.lastX, sentinel.lastY);
-                Console.Write(mapTiles[sentinel.lastY, sentinel.lastX]);
+                if (enemyManager.enemies[k] != null)
+                {
+                    Console.SetCursorPosition(enemyManager.enemies[k].lastX, enemyManager.enemies[k].lastY);
+                    Console.Write(mapTiles[enemyManager.enemies[k].lastY, enemyManager.enemies[k].lastX]);
+                }  
             }
         }
 

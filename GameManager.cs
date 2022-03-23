@@ -8,73 +8,43 @@ namespace Test_Based_RPG
 {
     class GameManager
     {
+        public bool gameOver = false;
         public Player player;
         public Map map;
-        //public EnemyManager enemyManager;
-        public Tracker tracker;
-        public Spaz spaz;
-        public Sentinel sentinel;
-        public Medkit medkit;
-        public PowerUp powerUp;
-        public Money money;
-        public Key key;
+        public EnemyManager enemyManager;
+        public ItemManager itemManager;
         public Door door;
+        public HUD hud;
         public void InitializeGame()
         {
             //On game launch
+            hud = new HUD();
             map = new Map();
             map.GetMapData();
-            //enemyManager = new EnemyManager();
-            //enemyManager.CreateEnemies();
+            enemyManager = new EnemyManager();
+            enemyManager.CreateEnemies();
+            itemManager = new ItemManager();
+            itemManager.CreateItems();
             player = new Player();
-            tracker = new Tracker();
-            //tracker.Initialize(3, 10, 5, tracker.avatar);
-            spaz = new Spaz();
-            sentinel = new Sentinel();
-            medkit = new Medkit();
-            powerUp = new PowerUp();
-            money = new Money();
-            key = new Key();
             door = new Door();
-            
-            player.ShowStats();
             player.ShowInventory(map);
             Console.CursorVisible = false;
         }
 
-        public void GameLoop(Player player, ref Tracker tracker, ref Spaz spaz, ref Sentinel sentinel, Map map, Medkit medkit, PowerUp powerUp, Money money, Key key, Door door)
+        public void GameLoop(Player player, Map map, EnemyManager enemyManager, HUD hud, ItemManager itemManager, Door door)
         {
             //Game Loop
             while (player.dead == false)
             {
-                player.ShowStats();
+                map.Update(player, enemyManager, itemManager, door);
                 player.ShowInventory(map);
-                map.Update(player, ref tracker, ref spaz, ref sentinel, medkit, powerUp, money, key, door);
-                player.CalculateMovement(map, ref tracker,  ref spaz, ref sentinel);
-                medkit.HealOnContact(player);
-                powerUp.PowerUpOnContact(player);
-                money.PickUpOnContact(player);
-                key.PickUpOnContact(player, key);
-                door.OpenOnContact(player, key);
-
-                player.ShowStats();
-                player.ShowInventory(map);
-
-                map.Update(player, ref tracker, ref spaz, ref sentinel, medkit, powerUp, money, key, door);
-                if (tracker != null)
-                {
-                    tracker.CalculateMovement(map, player, spaz, sentinel);
-                }
-
-                if (spaz != null)
-                {
-                    spaz.CalculateMovement(map, player, tracker, sentinel);
-                }
-                
-                if (sentinel != null)
-                {
-                    sentinel.CalculateMovement(map, player, tracker, sentinel);
-                }
+                player.CalculateMovement(map, enemyManager, hud);
+                enemyManager.MoveEnemies(map, player, enemyManager, hud);
+                //medkit.HealOnContact(player);
+                //powerUp.PowerUpOnContact(player);
+                //money.PickUpOnContact(player);
+                //key.PickUpOnContact(player, key);
+                //door.OpenOnContact(player, key);
             }
         }
 
@@ -92,7 +62,7 @@ namespace Test_Based_RPG
         public void LaunchGame()
         {
             InitializeGame();
-            GameLoop(player, ref tracker, ref spaz, ref sentinel, map, medkit, powerUp, money, key, door);
+            GameLoop(player, map, enemyManager, hud, itemManager, door);
             EndGame();
         }
     }

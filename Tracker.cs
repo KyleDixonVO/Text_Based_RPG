@@ -21,7 +21,7 @@ namespace Test_Based_RPG
             y = 10;
         }
 
-        public void CalculateMovement(Map map, Player player, Enemy enemy, Enemy enemy1)
+        public override void CalculateMovement(Map map, Player player, EnemyManager enemyManager, HUD hud)
         {
 
             
@@ -64,20 +64,24 @@ namespace Test_Based_RPG
                 }
 
                 //detecting collision with player
-                if (IsGameCharacter(this, player))
+                if (IsGameCharacter(this, player, hud))
                 {
                     Console.Beep(200, 33);
                     Console.Beep(100, 33);
                     player.TakeDamage(damage);
                     canMoveThere = false;
                     playerHit = true;
-                    this.ShowStats(avatar);
+                    hud.ShowPlayerStats(player);
                 }
 
-                if (IsGameCharacter(this, enemy) == true || IsGameCharacter(this, enemy1) == true)
+                for (int i = 0; i < enemyManager.enemies.Length; i++)
                 {
-                    canMoveThere = false;
+                    if (IsGameCharacter(this, enemyManager.enemies[i], hud) == true)
+                    {
+                        canMoveThere = false;
+                    }
                 }
+
 
                 Move();
                 turnCount = 0;

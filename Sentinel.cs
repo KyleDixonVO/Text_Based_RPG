@@ -17,7 +17,7 @@ namespace Test_Based_RPG
             x = 15;
             y = 5;
         }
-        public void CalculateMovement(Map map, Player player, Enemy enemy, Enemy enemy1)
+        public override void CalculateMovement(Map map, Player player, EnemyManager enemyManager, HUD hud)
         {
             SaveLastPosition();
             canMoveThere = true;
@@ -53,20 +53,27 @@ namespace Test_Based_RPG
                 canMoveThere = false;
             }
 
-            if (IsGameCharacter(this, player))
+            if (IsGameCharacter(this, player, hud))
             {
                 Console.Beep(200, 33);
                 Console.Beep(100, 33);
                 player.TakeDamage(damage);
+                hud.ShowPlayerStats(player);
                 canMoveThere = false;
-                this.ShowStats(avatar);
             }
 
-            if (IsGameCharacter(this, enemy) == true || IsGameCharacter(this, enemy1) == true)
+            for (int i = 0; i < enemyManager.enemies.Length; i++)
             {
-                canMoveThere = false;
+                if (enemyManager.enemies[i] != null)
+                {
+                    if (IsGameCharacter(this, enemyManager.enemies[i], hud) == true && (this != enemyManager.enemies[i]))
+                    {
+                        canMoveThere = false;
+                    }
+                }
             }
-            Move();
+
+         Move();
         }
     }
 }

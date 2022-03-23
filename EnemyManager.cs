@@ -9,9 +9,8 @@ namespace Test_Based_RPG
     class EnemyManager
     {
         //handles creating and nulling of enemies
-        public int maxEnemies = 10;
-        public List<Enemy> enemies = new List<Enemy>();
-        public int[] enemyTypes = new int[3];
+        const int maxEnemies = 75;
+        public Enemy[] enemies = new Enemy[maxEnemies];
         private Random rd = new Random();
         private int randomType;
 
@@ -22,30 +21,43 @@ namespace Test_Based_RPG
                 randomType = rd.Next(0, 2);
                 if (randomType == 0)
                 {
-                    Tracker tracker = new Tracker();
-                    enemies.Add(tracker);
+                    enemies[i] = new Tracker();
+                    enemies[i].name = ("tracker" + i.ToString());
                 }
                 else if (randomType == 1)
                 {
-                    Spaz spaz = new Spaz();
-                    enemies.Add(spaz);
+                    enemies[i] = new Spaz();
+                    enemies[i].name = ("spaz" + i.ToString());
                 }
                 else if (randomType == 2)
                 {
-                    Sentinel sentinel = new Sentinel();
-                    enemies.Add(sentinel);
+                    enemies[i] = new Sentinel();
+                    enemies[i].name = ("Sentinel" + i.ToString());
                 }
+                Console.WriteLine(enemies[i].GetName());
+            }
+            Console.ReadKey(true);
+            Console.Clear();
+        }
 
+        public void MoveEnemies(Map map, Player player, EnemyManager enemyManager, HUD hud)
+        {
+            for (int j = 0; j < enemies.Length; j++)
+            {
+                if (enemies[j] != null)
+                {
+                    enemies[j].CalculateMovement(map, player, enemyManager, hud);
+                }
             }
         }
 
         public void CheckIfDead()
         {
-            foreach (Enemy enemy in enemies)
+            for (int i = 0; i < maxEnemies; i++)
             {
-                if (enemy.dead == true)
+                if (enemies[i].dead == true)
                 {
-                    NullEnemy(enemy);
+                    NullEnemy(enemies[i]);
                 }
             }
         }

@@ -26,8 +26,9 @@ namespace Test_Based_RPG
             money = 0;
             Inventory = new List<Item>();
         }
-        public void CalculateMovement(Map map, ref Tracker tracker, ref Spaz spaz, ref Sentinel sentinel)
+        public void CalculateMovement(Map map, EnemyManager enemyManager, HUD hud)
         {
+
             SaveLastPosition();
             canMoveThere = true;
             input = Console.ReadKey(true).Key;
@@ -56,34 +57,21 @@ namespace Test_Based_RPG
                 canMoveThere = false;
             }
 
+            for (int i = 0; i < enemyManager.enemies.Length; i ++)
+            {
+                if (enemyManager.enemies[i] != null)
+                {
+                    if (IsGameCharacter(this, enemyManager.enemies[i], hud))
+                    {
+                        enemyManager.enemies[i].TakeDamage(damage);
+                        hud.ShowEnemyStats(enemyManager.enemies[i]);
+                        Console.Beep(300, 33);
+                        Console.Beep(400, 33);
+                        canMoveThere = false;
+                    }
+                }
+            }
             
-            //detects collisions between player and enemies, will later be handled by enemy manager
-            if (IsGameCharacter(this, tracker))
-            {
-                Console.Beep(400, 33);
-                Console.Beep(500, 33);
-                tracker.TakeDamage(damage);
-                canMoveThere = false;
-                tracker.ShowStats(tracker.avatar);
-            }
-            else if (IsGameCharacter(this, spaz))
-            {
-                Console.Beep(400, 33);
-                Console.Beep(500, 33);
-                spaz.TakeDamage(damage);
-                canMoveThere = false;
-                spaz.ShowStats(spaz.avatar);
-            }
-            else if (IsGameCharacter(this, sentinel))
-            {
-                Console.Beep(400, 33);
-                Console.Beep(500, 33);
-                sentinel.TakeDamage(damage);
-                canMoveThere = false;
-                sentinel.ShowStats(sentinel.avatar);
-            }
-
-
             Move();
         }
 

@@ -40,16 +40,9 @@ namespace Test_Based_RPG
             }
         }
 
-        public void ShowStats()
-        {
-            Console.ForegroundColor = ConsoleColor.White;
-            Console.BackgroundColor = ConsoleColor.DarkGreen;
-            Console.SetCursorPosition(1, 13);
-            Console.Write(avatar + " health: " + health + "/" + maxHealth + " damage: " + damage + " ");
-            Console.ResetColor();
-        }
+        
 
-        protected bool IsGameCharacter(GameCharacter gameCharacter, GameCharacter gameCharacter1)
+        protected bool IsGameCharacter(GameCharacter gameCharacter, GameCharacter gameCharacter1, HUD hud)
         {
             if (gameCharacter == null || gameCharacter1 == null) return false; 
             

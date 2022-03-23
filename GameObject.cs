@@ -11,5 +11,11 @@ namespace Test_Based_RPG
         public int x;
         public int y;
         public char avatar = '%';
+        public string name;
+
+        public string GetName()
+        {
+            return name;
+        }
     }
 }

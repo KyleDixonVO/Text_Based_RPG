@@ -39,13 +39,9 @@ namespace Test_Based_RPG
             }
         }
 
-        public void ShowStats(char avatar)
+        public virtual void CalculateMovement(Map map, Player player, EnemyManager enemyManager, HUD hud)
         {
-            Console.ForegroundColor = ConsoleColor.Black;
-            Console.BackgroundColor = ConsoleColor.Red;
-            Console.SetCursorPosition(1, 14);
-            Console.Write(avatar + " health: " + health + "/" + maxHealth + " ");
-            Console.ResetColor();
+
         }
     }
 }
