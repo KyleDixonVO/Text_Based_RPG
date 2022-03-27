@@ -17,7 +17,7 @@ namespace Test_Based_RPG
             x = 15;
             y = 5;
         }
-        public override void CalculateMovement(Map map, Player player, EnemyManager enemyManager, HUD hud)
+        public override void CalculateMovement(Map map, Player player, EnemyManager enemyManager, HUD hud, Door door)
         {
             SaveLastPosition();
             canMoveThere = true;
@@ -53,12 +53,12 @@ namespace Test_Based_RPG
                 canMoveThere = false;
             }
 
-            if (IsGameCharacter(this, player, hud))
+            if (IsGameCharacter(this, player))
             {
                 Console.Beep(200, 33);
                 Console.Beep(100, 33);
                 player.TakeDamage(damage);
-                hud.ShowPlayerStats(player);
+                hud.ShowPlayerStats(player, map);
                 canMoveThere = false;
             }
 
@@ -66,11 +66,16 @@ namespace Test_Based_RPG
             {
                 if (enemyManager.enemies[i] != null)
                 {
-                    if (IsGameCharacter(this, enemyManager.enemies[i], hud) == true && (this != enemyManager.enemies[i]))
+                    if (IsGameCharacter(this, enemyManager.enemies[i]) == true && (this != enemyManager.enemies[i]))
                     {
                         canMoveThere = false;
                     }
                 }
+            }
+
+            if (door.WillEntityCollide(this))
+            {
+                canMoveThere = false;
             }
 
          Move();

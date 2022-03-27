@@ -21,7 +21,7 @@ namespace Test_Based_RPG
             y = 10;
         }
 
-        public override void CalculateMovement(Map map, Player player, EnemyManager enemyManager, HUD hud)
+        public override void CalculateMovement(Map map, Player player, EnemyManager enemyManager, HUD hud, Door door)
         {
 
             
@@ -64,22 +64,27 @@ namespace Test_Based_RPG
                 }
 
                 //detecting collision with player
-                if (IsGameCharacter(this, player, hud))
+                if (IsGameCharacter(this, player))
                 {
                     Console.Beep(200, 33);
                     Console.Beep(100, 33);
                     player.TakeDamage(damage);
                     canMoveThere = false;
                     playerHit = true;
-                    hud.ShowPlayerStats(player);
+                    hud.ShowPlayerStats(player, map);
                 }
 
                 for (int i = 0; i < enemyManager.enemies.Length; i++)
                 {
-                    if (IsGameCharacter(this, enemyManager.enemies[i], hud) == true)
+                    if (IsGameCharacter(this, enemyManager.enemies[i]) == true)
                     {
                         canMoveThere = false;
                     }
+                }
+
+                if (door.WillEntityCollide(this))
+                {
+                    canMoveThere = false;
                 }
 
 

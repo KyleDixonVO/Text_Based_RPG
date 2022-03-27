@@ -36,15 +36,14 @@ namespace Test_Based_RPG
             //Game Loop
             while (player.dead == false)
             {
+                hud.ShowPlayerStats(player, map);
                 map.Update(player, enemyManager, itemManager, door);
                 player.ShowInventory(map);
-                player.CalculateMovement(map, enemyManager, hud);
-                enemyManager.MoveEnemies(map, player, enemyManager, hud);
-                //medkit.HealOnContact(player);
-                //powerUp.PowerUpOnContact(player);
-                //money.PickUpOnContact(player);
-                //key.PickUpOnContact(player, key);
-                //door.OpenOnContact(player, key);
+                player.CalculateMovement(map, enemyManager, hud, door);
+                door.Update(player, enemyManager, (Key)itemManager.items[0]);
+                enemyManager.Update(map, player, enemyManager, hud, door);
+                itemManager.Update(player, (Key)itemManager.items[0]);
+                
             }
         }
 

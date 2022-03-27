@@ -26,7 +26,7 @@ namespace Test_Based_RPG
             money = 0;
             Inventory = new List<Item>();
         }
-        public void CalculateMovement(Map map, EnemyManager enemyManager, HUD hud)
+        public void CalculateMovement(Map map, EnemyManager enemyManager, HUD hud, Door door)
         {
 
             SaveLastPosition();
@@ -61,15 +61,21 @@ namespace Test_Based_RPG
             {
                 if (enemyManager.enemies[i] != null)
                 {
-                    if (IsGameCharacter(this, enemyManager.enemies[i], hud))
+                    if (IsGameCharacter(this, enemyManager.enemies[i]))
                     {
                         enemyManager.enemies[i].TakeDamage(damage);
-                        hud.ShowEnemyStats(enemyManager.enemies[i]);
+                        hud.ShowEnemyStats(enemyManager.enemies[i], map);
                         Console.Beep(300, 33);
                         Console.Beep(400, 33);
                         canMoveThere = false;
                     }
                 }
+            }
+
+            if (door.WillEntityCollide(this))
+            {
+                Console.Beep(250, 33);
+                canMoveThere = false;
             }
             
             Move();

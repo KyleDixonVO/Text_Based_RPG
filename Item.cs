@@ -10,14 +10,20 @@ namespace Test_Based_RPG
     {
         public bool used = false;
         public string colorID;
-        public bool IsItemHere(Player player)
+        public bool obtained = false;
+        public bool IsItemHere(GameCharacter gameCharacter)
         {
-            if (player.futureX == this.x && player.futureY == this.y)
+            if (gameCharacter.futureX == this.x && gameCharacter.futureY == this.y)
             {
                 return true;
             }
 
             return false;
+        }
+
+        public virtual void OnContact(Player player, Key key)
+        {
+
         }
 
     }
@@ -34,7 +40,7 @@ namespace Test_Based_RPG
             colorID = "money";
         }
 
-        public void PickUpOnContact(Player player)
+        public override void OnContact(Player player, Key key)
         {
             if (IsItemHere(player) == true && used == false)
             {
@@ -60,7 +66,7 @@ namespace Test_Based_RPG
             colorID = "medkit";
         }
 
-        public void HealOnContact(Player player)
+        public override void OnContact(Player player, Key key)
         {
             if (IsItemHere(player) && used == false)
             {
@@ -89,7 +95,7 @@ namespace Test_Based_RPG
             colorID = "powerup";
         }
 
-        public void PowerUpOnContact(Player player)
+        public override void OnContact(Player player, Key key)
         {
             if (IsItemHere(player) == true && used == false)
             {
@@ -104,7 +110,6 @@ namespace Test_Based_RPG
 
     class Key : Item
     {
-        public bool obtained;
         public Key()
         {
             avatar = 'K';
@@ -112,16 +117,16 @@ namespace Test_Based_RPG
             y = 7;
             used = false;
             obtained = false;
-            name = "Key";
             colorID = "key";
         }
 
-        public void PickUpOnContact(Player player, Key key)
+        public override void OnContact(Player player, Key key)
         {
             if (IsItemHere(player) == true && obtained == false)
             {
                 player.Inventory.Add(key);
                 obtained = true;
+                colorID = "";
             }
         }
     }

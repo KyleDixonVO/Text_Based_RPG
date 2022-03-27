@@ -28,16 +28,22 @@ namespace Test_Based_RPG
             Console.SetCursorPosition(player.x, player.y);
             Console.Write(player.avatar);
 
-            for (int i = 0; i < itemManager.items.Length; i++)
+            if (itemManager.items[0].obtained == false)
+            {
+                Console.SetCursorPosition(itemManager.items[0].x, itemManager.items[0].y);
+                SetItemColor(itemManager, 0);
+                Console.Write(itemManager.items[0].avatar);
+                Console.ResetColor();
+            }
+
+            for (int i = 1; i < itemManager.items.Length; i++)
             {
                 Console.SetCursorPosition(itemManager.items[i].x, itemManager.items[i].y);
                 if (itemManager.items[i].used == false)
                 {
+                    SetItemColor(itemManager, i);
                     Console.Write(itemManager.items[i].avatar);
-                }
-                else
-                {
-                    Console.Write(' ');
+                    Console.ResetColor();
                 }
             }
 
@@ -145,6 +151,30 @@ namespace Test_Based_RPG
             else
             {
                 Console.ForegroundColor = ConsoleColor.White;
+            }
+        }
+
+        private void SetItemColor(ItemManager itemManager, int i)
+        {
+            if (itemManager.items[i].colorID == "money")
+            {
+                Console.ForegroundColor = ConsoleColor.DarkGreen;
+                Console.BackgroundColor = ConsoleColor.Green;
+            }
+            else if (itemManager.items[i].colorID == "medkit")
+            {
+                Console.ForegroundColor = ConsoleColor.White;
+                Console.BackgroundColor = ConsoleColor.Red;
+            }
+            else if (itemManager.items[i].colorID == "powerup")
+            {
+                Console.ForegroundColor = ConsoleColor.White;
+                Console.BackgroundColor = ConsoleColor.Blue;
+            }
+            else if (itemManager.items[i].colorID == "key")
+            {
+                Console.ForegroundColor = ConsoleColor.Yellow;
+                Console.BackgroundColor = ConsoleColor.DarkYellow;
             }
         }
 

@@ -19,7 +19,7 @@ namespace Test_Based_RPG
         public int damage = 1;
         public bool dead = false;
         public bool canMoveThere;
-
+        public static Random rd = new Random();
         public void Initialize(int setHealth, int setX, int setY, char setAvatar)
         {
             maxHealth = setHealth;
@@ -42,7 +42,7 @@ namespace Test_Based_RPG
 
         
 
-        protected bool IsGameCharacter(GameCharacter gameCharacter, GameCharacter gameCharacter1, HUD hud)
+        protected bool IsGameCharacter(GameCharacter gameCharacter, GameCharacter gameCharacter1)
         {
             if (gameCharacter == null || gameCharacter1 == null) return false; 
             

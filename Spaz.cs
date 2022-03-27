@@ -8,7 +8,6 @@ namespace Test_Based_RPG
 {
     class Spaz : Enemy
     {
-        private Random rd = new Random();
 
         public Spaz()
         {
@@ -20,11 +19,11 @@ namespace Test_Based_RPG
             y = 7;
         }
 
-        public override void CalculateMovement(Map map, Player player, EnemyManager enemyManager, HUD hud)
+        public override void CalculateMovement(Map map, Player player, EnemyManager enemyManager, HUD hud, Door door)
         {
             SaveLastPosition();
             canMoveThere = true;
-            int moveDirection = rd.Next(0,3);
+            int moveDirection = rd.Next(0,4);
             if (moveDirection == 0)
             {
                 deltaX = 1;
@@ -49,24 +48,29 @@ namespace Test_Based_RPG
                 canMoveThere = false;
             }
 
-            if (IsGameCharacter(this, player, hud) == true)
+            if (IsGameCharacter(this, player) == true)
             {
                 Console.Beep(200, 33);
                 Console.Beep(100, 33);
                 player.TakeDamage(damage);
                 canMoveThere = false;
-                hud.ShowPlayerStats(player);
+                hud.ShowPlayerStats(player, map);
             }
 
             for (int i = 0; i < enemyManager.enemies.Length; i++)
             {
                 if (enemyManager.enemies[i] != null)
                 {
-                    if (IsGameCharacter(this, enemyManager.enemies[i], hud) == true && (this != enemyManager.enemies[i]))
+                    if (IsGameCharacter(this, enemyManager.enemies[i]) == true && (this != enemyManager.enemies[i]))
                     {
                         canMoveThere = false;
                     }
                 }
+            }
+
+            if (door.WillEntityCollide(this))
+            {
+                canMoveThere = false;
             }
 
             Move();

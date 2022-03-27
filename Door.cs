@@ -17,24 +17,29 @@ namespace Test_Based_RPG
             doorOpened = false;
         }
 
-        public void OpenOnContact(Player player, Key key)
+        public void OpenWithKey(Player player, Key key)
         {
-            if (WillPlayerCollide(player) == true && player.Inventory.Contains(key) == true && doorOpened == false)
+            if (key.obtained == true && doorOpened == false)
             {
                 doorOpened = true;
                 player.Inventory.Remove(key);
             }
         }
 
-        public bool WillPlayerCollide(Player player)
+        public bool WillEntityCollide(GameCharacter gameCharacter)
         {
-            if (player.futureX == this.x && player.futureY == this.y)
+            if (gameCharacter.futureX == x && gameCharacter.futureY == y && doorOpened == false)
             {
-                player.canMoveThere = false;
+                gameCharacter.canMoveThere = false;
                 return true;
             }
 
             return false;
+        }
+
+        public void Update(Player player, EnemyManager enemyManager, Key key)
+        {
+            OpenWithKey(player, key);
         }
     }
 }
