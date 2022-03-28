@@ -8,16 +8,16 @@ namespace Test_Based_RPG
 {
     class ItemManager
     {
-        const int maxItems = 76;
+        const int maxItems = 40;
         public Item[] items = new Item[maxItems];
         private Random rd = new Random();
         private int randomType;
 
-        public void CheckContact(Player player, Key key)
+        public void CheckContact(Player player, Key key, Inventory inventory)
         {
             for (int i = 0; i < items.Length; i++)
             {
-                items[i].OnContact(player, key);
+                items[i].OnContact(player, key, inventory);
             }
         }
 
@@ -28,23 +28,29 @@ namespace Test_Based_RPG
             Console.WriteLine(items[0].GetName());
             for (int i = 1; i < maxItems; i++)
             {
+                if (i < 26)
+                {
+                    items[i] = new Money();
+                    items[i].name = ("Money" + i.ToString());
+                }
+                else
+                {
                     randomType = rd.Next(0, 2);
                     if (randomType == 0)
                     {
-                        items[i] = new Money();
-                        items[i].name = ("Money" + i.ToString());
+                        items[i] = new Medkit(rd.Next(1, 50), rd.Next(20, 22));
+                        items[i].name = ("Medkit" + i.ToString());
                     }
                     else if (randomType == 1)
                     {
-                        items[i] = new Medkit();
-                        items[i].name = ("Medkit" + i.ToString());
-                    }
-                    else if (randomType == 2)
-                    {
-                        items[i] = new PowerUp();
+                        items[i] = new PowerUp(rd.Next(50, 70), rd.Next(10, 15));
                         items[i].name = ("PowerUP" + i.ToString());
                     }
-                    Console.WriteLine(items[i].GetName());
+                }
+                    
+
+
+                Console.WriteLine(items[i].GetName());
                 
             }
             Console.ReadKey(true);
@@ -66,10 +72,10 @@ namespace Test_Based_RPG
             item = null;
         }
 
-        public void Update(Player player, Key key)
+        public void Update(Player player, Key key, Inventory inventory)
         {
             CheckIfUsed();
-            CheckContact(player, key);
+            CheckContact(player, key, inventory);
         }
     }
 }

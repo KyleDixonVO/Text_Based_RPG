@@ -9,29 +9,28 @@ namespace Test_Based_RPG
     class EnemyManager
     {
         //handles creating and nulling of enemies
-        const int maxEnemies = 75;
+        const int maxEnemies = 32;
         public Enemy[] enemies = new Enemy[maxEnemies];
         private Random rd = new Random();
         private int randomType;
 
         public void CreateEnemies()
         {
-            enemies[0] = new Sentinel();
+            enemies[0] = new Sentinel(3, 25);
             enemies[0].name = ("Sentinel0");
-            enemies[1] = new Sentinel();
+            enemies[1] = new Sentinel(22, 22);
             enemies[0].name = ("Sentinel1");
             for (int i = 2; i < maxEnemies; i++)
             {
-                randomType = rd.Next(0, 2);
-                if (randomType == 0)
+                if (i < 28)
                 {
-                    enemies[i] = new Tracker();
-                    enemies[i].name = ("tracker" + i.ToString());
-                }
-                else if (randomType == 1)
-                {
-                    enemies[i] = new Spaz();
+                    enemies[i] = new Spaz(rd.Next(20, 40), rd.Next(19, 27));
                     enemies[i].name = ("spaz" + i.ToString());
+                }
+                else
+                {
+                    enemies[i] = new Tracker(rd.Next(33, 40), rd.Next(2, 6));
+                    enemies[i].name = ("tracker" + i.ToString());
                 }
                 Console.WriteLine(enemies[i].GetName());
             }
@@ -39,13 +38,13 @@ namespace Test_Based_RPG
             Console.Clear();
         }
 
-        public void MoveEnemies(Map map, Player player, EnemyManager enemyManager, HUD hud, Door door)
+        public void MoveEnemies(Map map, Player player, EnemyManager enemyManager, HUD hud, Door door, Camera camera)
         {
             for (int j = 0; j < enemies.Length; j++)
             {
                 if (enemies[j] != null)
                 {
-                    enemies[j].CalculateMovement(map, player, enemyManager, hud, door);
+                    enemies[j].CalculateMovement(map, player, enemyManager, hud, door, camera);
                 }
             }
         }
@@ -66,10 +65,10 @@ namespace Test_Based_RPG
             enemy = null;
         }
 
-        public void Update(Map map, Player player, EnemyManager enemyManager, HUD hud, Door door)
+        public void Update(Map map, Player player, EnemyManager enemyManager, HUD hud, Door door, Camera camera)
         {
             CheckIfDead();
-            MoveEnemies(map, player, enemyManager, hud, door);
+            MoveEnemies(map, player, enemyManager, hud, door, camera);
         }
     }
 }

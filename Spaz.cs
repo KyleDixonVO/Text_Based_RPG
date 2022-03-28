@@ -9,17 +9,17 @@ namespace Test_Based_RPG
     class Spaz : Enemy
     {
 
-        public Spaz()
+        public Spaz(int posX, int posY)
         {
             damage = 3;
             avatar = 'Z';
             health = 2;
             maxHealth = health;
-            x = 5;
-            y = 7;
+            x = posX;
+            y = posY;
         }
 
-        public override void CalculateMovement(Map map, Player player, EnemyManager enemyManager, HUD hud, Door door)
+        public override void CalculateMovement(Map map, Player player, EnemyManager enemyManager, HUD hud, Door door, Camera camera)
         {
             SaveLastPosition();
             canMoveThere = true;
@@ -54,7 +54,7 @@ namespace Test_Based_RPG
                 Console.Beep(100, 33);
                 player.TakeDamage(damage);
                 canMoveThere = false;
-                hud.ShowPlayerStats(player, map);
+                hud.ShowPlayerStats(ref player, map, camera);
             }
 
             for (int i = 0; i < enemyManager.enemies.Length; i++)

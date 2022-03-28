@@ -11,17 +11,17 @@ namespace Test_Based_RPG
         private int trackingY;
         private int trackingX;
 
-        public Tracker()
+        public Tracker(int posX, int posY)
         {
             damage = 1;
             avatar = 'T';
             health = 5;
             maxHealth = health;
-            x = 5;
-            y = 10;
+            x = posX;
+            y = posY;
         }
 
-        public override void CalculateMovement(Map map, Player player, EnemyManager enemyManager, HUD hud, Door door)
+        public override void CalculateMovement(Map map, Player player, EnemyManager enemyManager, HUD hud, Door door, Camera camera)
         {
 
             
@@ -71,7 +71,7 @@ namespace Test_Based_RPG
                     player.TakeDamage(damage);
                     canMoveThere = false;
                     playerHit = true;
-                    hud.ShowPlayerStats(player, map);
+                    hud.ShowPlayerStats(ref player, map, camera);
                 }
 
                 for (int i = 0; i < enemyManager.enemies.Length; i++)

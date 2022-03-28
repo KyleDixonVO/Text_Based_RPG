@@ -17,12 +17,12 @@ namespace Test_Based_RPG
             doorOpened = false;
         }
 
-        public void OpenWithKey(Player player, Key key)
+        public void OpenWithKey(Inventory inventory, Key key)
         {
             if (key.obtained == true && doorOpened == false)
             {
                 doorOpened = true;
-                player.Inventory.Remove(key);
+                inventory.PlayerInventory.Remove(key);
             }
         }
 
@@ -37,9 +37,9 @@ namespace Test_Based_RPG
             return false;
         }
 
-        public void Update(Player player, EnemyManager enemyManager, Key key)
+        public void Update(Player player, EnemyManager enemyManager, Key key, Inventory inventory)
         {
-            OpenWithKey(player, key);
+            OpenWithKey(inventory, key);
         }
     }
 }

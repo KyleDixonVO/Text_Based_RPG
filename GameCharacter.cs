@@ -19,6 +19,7 @@ namespace Test_Based_RPG
         public int damage = 1;
         public bool dead = false;
         public bool canMoveThere;
+        public bool movedLastTurn = true;
         public static Random rd = new Random();
         public void Initialize(int setHealth, int setX, int setY, char setAvatar)
         {
@@ -74,10 +75,16 @@ namespace Test_Based_RPG
             {
                 y = futureY;
                 x = futureX;
+                movedLastTurn = true;
+            }
+            else
+            {
+                movedLastTurn = false;
             }
 
             deltaX = 0;
             deltaY = 0;
+           
         }
     }
 }

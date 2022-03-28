@@ -39,7 +39,7 @@ namespace Test_Based_RPG
             }
         }
 
-        public virtual void CalculateMovement(Map map, Player player, EnemyManager enemyManager, HUD hud, Door door)
+        public virtual void CalculateMovement(Map map, Player player, EnemyManager enemyManager, HUD hud, Door door, Camera camera)
         {
 
         }

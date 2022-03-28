@@ -21,7 +21,7 @@ namespace Test_Based_RPG
             return false;
         }
 
-        public virtual void OnContact(Player player, Key key)
+        public virtual void OnContact(Player player, Key key, Inventory inventory)
         {
 
         }
@@ -40,11 +40,11 @@ namespace Test_Based_RPG
             colorID = "money";
         }
 
-        public override void OnContact(Player player, Key key)
+        public override void OnContact(Player player, Key key, Inventory inventory)
         {
             if (IsItemHere(player) == true && used == false)
             {
-                player.money++;
+                inventory.money++;
                 Console.Beep(900, 80);
                 used = true;
             }
@@ -57,16 +57,16 @@ namespace Test_Based_RPG
         private Random rd = new Random();
         private int healingAmount;
 
-        public Medkit()
+        public Medkit(int posX, int PosY)
         {
             used = false;
             avatar = 'H';
-            x = 12;
-            y = 8;
+            x = posX;
+            y = PosY;
             colorID = "medkit";
         }
 
-        public override void OnContact(Player player, Key key)
+        public override void OnContact(Player player, Key key, Inventory inventory)
         {
             if (IsItemHere(player) && used == false)
             {
@@ -85,17 +85,17 @@ namespace Test_Based_RPG
     class PowerUp : Item
     {
         private int damageMultiplier;
-        public PowerUp()
+        public PowerUp(int posX, int posY)
         {
             avatar = 'P';
-            x = 27;
-            y = 3;
+            x = posX;
+            y = posY;
             damageMultiplier = 2;
             used = false;
             colorID = "powerup";
         }
 
-        public override void OnContact(Player player, Key key)
+        public override void OnContact(Player player, Key key, Inventory inventory)
         {
             if (IsItemHere(player) == true && used == false)
             {
@@ -120,11 +120,11 @@ namespace Test_Based_RPG
             colorID = "key";
         }
 
-        public override void OnContact(Player player, Key key)
+        public override void OnContact(Player player, Key key, Inventory inventory)
         {
             if (IsItemHere(player) == true && obtained == false)
             {
-                player.Inventory.Add(key);
+                inventory.PlayerInventory.Add(key);
                 obtained = true;
                 colorID = "";
             }

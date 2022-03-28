@@ -13,16 +13,15 @@ namespace Test_Based_RPG
         public int columns;
         private bool hasMapInitialized = false;
         private char[,] mapTiles;
-
         private string[] dataFromFile;
         private char[] charsFromFile;
-        public void Update(Player player, EnemyManager enemyManager, ItemManager itemManager, Door door)
+        public void Update(Player player, EnemyManager enemyManager, ItemManager itemManager, Door door, Camera camera, int inventoryX, int inventoryY)
         {
-            DrawMap(player, enemyManager);
-            DrawEntities(player, enemyManager, itemManager, door);
+            DrawMap(player, enemyManager, camera, inventoryX, inventoryY);
+            DrawEntities(player, enemyManager, itemManager, door, camera);
         }
 
-        private void DrawEntities(Player player, EnemyManager enemyManager, ItemManager itemManager, Door door)
+        private void DrawEntities(Player player, EnemyManager enemyManager, ItemManager itemManager, Door door, Camera camera)
         {
             //drawing player
             Console.SetCursorPosition(player.x, player.y);
@@ -30,30 +29,39 @@ namespace Test_Based_RPG
 
             if (itemManager.items[0].obtained == false)
             {
-                Console.SetCursorPosition(itemManager.items[0].x, itemManager.items[0].y);
-                SetItemColor(itemManager, 0);
-                Console.Write(itemManager.items[0].avatar);
-                Console.ResetColor();
+                if (camera.InCameraWindow(itemManager.items[0].x, itemManager.items[0].y))
+                {
+                    Console.SetCursorPosition(itemManager.items[0].x, itemManager.items[0].y);
+                    SetItemColor(itemManager, 0);
+                    Console.Write(itemManager.items[0].avatar);
+                    Console.ResetColor();
+                }
             }
 
             for (int i = 1; i < itemManager.items.Length; i++)
             {
-                Console.SetCursorPosition(itemManager.items[i].x, itemManager.items[i].y);
-                if (itemManager.items[i].used == false)
+                if (camera.InCameraWindow(itemManager.items[i].x, itemManager.items[i].y))
                 {
-                    SetItemColor(itemManager, i);
-                    Console.Write(itemManager.items[i].avatar);
-                    Console.ResetColor();
+                    Console.SetCursorPosition(itemManager.items[i].x, itemManager.items[i].y);
+                    if (itemManager.items[i].used == false)
+                    {
+                        SetItemColor(itemManager, i);
+                        Console.Write(itemManager.items[i].avatar);
+                        Console.ResetColor();
+                    }
                 }
             }
 
             if (door.doorOpened == false)
             {
-                Console.SetCursorPosition(door.x, door.y);
-                Console.BackgroundColor = ConsoleColor.DarkYellow;
-                Console.ForegroundColor = ConsoleColor.Yellow;
-                Console.Write(door.avatar);
-                Console.ResetColor();
+                if (camera.InCameraWindow(door.x, door.y))
+                {
+                    Console.SetCursorPosition(door.x, door.y);
+                    Console.BackgroundColor = ConsoleColor.DarkYellow;
+                    Console.ForegroundColor = ConsoleColor.Yellow;
+                    Console.Write(door.avatar);
+                    Console.ResetColor();
+                }
             }
 
             //drawing enemy
@@ -63,17 +71,23 @@ namespace Test_Based_RPG
                 {
                     if (enemyManager.enemies[k].dead == false)
                     {
-                        Console.SetCursorPosition(enemyManager.enemies[k].x, enemyManager.enemies[k].y);
-                        Console.ForegroundColor = ConsoleColor.Red;
-                        Console.Write(enemyManager.enemies[k].avatar);
-                        Console.ResetColor();
+                        if (camera.InCameraWindow(enemyManager.enemies[k].x, enemyManager.enemies[k].y))
+                        {
+                            Console.SetCursorPosition(enemyManager.enemies[k].x, enemyManager.enemies[k].y);
+                            Console.ForegroundColor = ConsoleColor.Red;
+                            Console.Write(enemyManager.enemies[k].avatar);
+                            Console.ResetColor();
+                        }
                     }
                     else
                     {
-                        enemyManager.enemies[k].avatar = ' ';
-                        Console.SetCursorPosition(enemyManager.enemies[k].x, enemyManager.enemies[k].y);
-                        Console.Write(enemyManager.enemies[k].avatar);
-                        enemyManager.enemies[k] = null;
+                        if (camera.InCameraWindow(enemyManager.enemies[k].x, enemyManager.enemies[k].y))
+                        {
+                            enemyManager.enemies[k].avatar = ' ';
+                            Console.SetCursorPosition(enemyManager.enemies[k].x, enemyManager.enemies[k].y);
+                            Console.Write(enemyManager.enemies[k].avatar);
+                            enemyManager.enemies[k] = null;
+                        }
                     }
                 }
             }
@@ -83,13 +97,13 @@ namespace Test_Based_RPG
 
         private void SetBounds()
         {
-            Console.SetWindowSize((columns * 2), (rows*2));
-            Console.SetBufferSize((columns * 2), (rows *2));
+            //Console.SetWindowSize((columns * 2), (rows*2));
+            //Console.SetBufferSize((columns * 2), (rows *2));
         }
 
-        private void DrawMap(Player player, EnemyManager enemyManager)
+        private void DrawMap(Player player, EnemyManager enemyManager, Camera camera, int inventoryX, int inventoryY)
         {
-            Console.SetCursorPosition(0, 0);
+            //Console.SetCursorPosition(0, 0);
             if (hasMapInitialized == false)
             {
                 Console.SetCursorPosition(0, 0);
@@ -110,15 +124,198 @@ namespace Test_Based_RPG
 
             Console.SetCursorPosition(player.lastX, player.lastY);
             Console.Write(mapTiles[player.lastY, player.lastX]);
-            
+
             for (int k = 0; k < enemyManager.enemies.Length; k++)
             {
                 if (enemyManager.enemies[k] != null)
                 {
-                    Console.SetCursorPosition(enemyManager.enemies[k].lastX, enemyManager.enemies[k].lastY);
-                    Console.Write(mapTiles[enemyManager.enemies[k].lastY, enemyManager.enemies[k].lastX]);
-                }  
+                    if (camera.InCameraWindow(enemyManager.enemies[k].lastX, enemyManager.enemies[k].lastY))
+                    {
+                        Console.SetCursorPosition(enemyManager.enemies[k].lastX, enemyManager.enemies[k].lastY);
+                        Console.Write(mapTiles[enemyManager.enemies[k].lastY, enemyManager.enemies[k].lastX]);
+                    }
+                }
             }
+
+
+            if (inventoryX - 1 <= columns && inventoryY < rows)
+            {
+                Console.SetCursorPosition(inventoryX, inventoryY);
+                //SetTileColor(inventoryX, inventoryY);
+                Console.Write(mapTiles[inventoryY, inventoryX - 1]);
+                Console.ResetColor();
+            }
+
+            if (inventoryX + 9 < columns && inventoryY < rows)
+            {
+                Console.SetCursorPosition(inventoryX + 7, inventoryY);
+                //SetTileColor(inventoryX + 7, inventoryY);
+                Console.Write(mapTiles[inventoryY, inventoryX + 7]);
+                Console.SetCursorPosition(inventoryX + 8, inventoryY);
+                //SetTileColor(inventoryX + 8, inventoryY);
+                Console.Write(mapTiles[inventoryY, inventoryX + 8]);
+                Console.SetCursorPosition(inventoryX + 9, inventoryY);
+                //SetTileColor(inventoryX + 9, inventoryY);
+                Console.Write(mapTiles[inventoryY, inventoryX + 9]);
+                Console.ResetColor();
+            }
+            else
+            {
+                Console.SetCursorPosition(inventoryX + 7, inventoryY);
+                Console.Write(" ");
+                Console.SetCursorPosition(inventoryX + 8, inventoryY);
+                Console.Write(" ");
+                Console.SetCursorPosition(inventoryX + 9, inventoryY);
+                Console.Write(" ");
+            }
+
+
+            if (inventoryX - 1 <= columns && inventoryY + 1 < rows)
+            {
+                Console.SetCursorPosition(inventoryX, inventoryY + 1);
+                //SetTileColor(inventoryX, inventoryY + 1);
+                Console.Write(mapTiles[inventoryY + 1, inventoryX - 1]);
+                Console.ResetColor();
+            }
+
+            if (inventoryX + 17 <= columns && inventoryY + 1 < rows)
+            {
+                Console.SetCursorPosition(inventoryX + 16, inventoryY + 1);
+                //SetTileColor(inventoryX + 16, inventoryY + 1);
+                Console.Write(mapTiles[inventoryY + 1, inventoryX + 16]);
+                Console.ResetColor();
+            }
+            else
+            {
+                Console.SetCursorPosition(inventoryX + 16, inventoryY + 1);
+                Console.Write(" ");
+            }
+
+            if (inventoryX + 9 <= columns && inventoryY - 1 <= rows)
+            {
+                Console.SetCursorPosition(inventoryX, inventoryY - 1);
+
+                for (int z = 0; z < 9; z ++)
+                {
+                    Console.SetCursorPosition(inventoryX + z, inventoryY);
+                    //SetTileColor(inventoryX + z, inventoryY);
+                    Console.Write(mapTiles[inventoryY, inventoryX + z]);
+                    Console.ResetColor();
+                }
+            }
+
+            if (inventoryX + 16 <= columns && inventoryY <= rows)
+            {
+                Console.SetCursorPosition(inventoryX, inventoryY);
+
+                for (int z = 0; z < 16; z++)
+                {
+                    Console.SetCursorPosition(inventoryX + z, inventoryY);
+                    //SetTileColor(inventoryX + z, inventoryY);
+                    Console.Write(mapTiles[inventoryY, inventoryX + z]);
+                    Console.ResetColor();
+                }
+            }
+
+            if (inventoryX  + 16 <= columns && inventoryY + 1 <= rows)
+            {
+                Console.SetCursorPosition(inventoryX, inventoryY + 1);
+
+                for (int z = 0; z < 16; z++)
+                {
+                    Console.SetCursorPosition(inventoryX + z, inventoryY + 1);
+                    //SetTileColor(inventoryX + z, inventoryY + 1);
+                    Console.Write(mapTiles[inventoryY + 1, inventoryX + z]);
+                    Console.ResetColor();
+                }
+            }
+
+            //Console.SetCursorPosition(Console.WindowLeft + 1, Console.WindowTop + camera.windowHeight - 2);
+            //int hudX = Console.CursorLeft;
+            //int hudY = Console.CursorTop;
+
+            //if (hudX - 1 <= columns && hudY < rows)
+            //{
+            //    Console.SetCursorPosition(hudX, hudY);
+            //    Console.Write(mapTiles[hudY, hudX - 1]);
+            //    Console.ResetColor();
+            //}
+
+            //if (hudX + 20 < columns && hudY < rows)
+            //{
+            //    Console.SetCursorPosition(hudX + 20, hudY);
+            //    Console.Write(mapTiles[hudY, hudX + 18]);
+            //    Console.SetCursorPosition(hudX + 19, hudY);
+            //    Console.Write(mapTiles[hudY, hudX + 19]);
+            //    Console.SetCursorPosition(hudX + 20, hudY);
+            //    Console.Write(mapTiles[hudY, hudX + 20]);
+            //    Console.ResetColor();
+            //}
+            //else
+            //{
+            //    Console.SetCursorPosition(hudX + 18, hudY);
+            //    Console.Write(" ");
+            //    Console.SetCursorPosition(hudX + 19, hudY);
+            //    Console.Write(" ");
+            //    Console.SetCursorPosition(hudX + 20, hudY);
+            //    Console.Write(" ");
+            //}
+
+
+            //if (hudX - 1 <= columns && hudY + 1 < rows)
+            //{
+            //    Console.SetCursorPosition(hudX, hudY + 1);
+            //    Console.Write(mapTiles[hudY + 1, hudX - 1]);
+            //    Console.ResetColor();
+            //}
+
+            //if (hudX + 20 <= columns && hudY + 1 < rows)
+            //{
+            //    Console.SetCursorPosition(hudX + 20, hudY + 1);
+            //    Console.Write(mapTiles[hudY + 1, hudX + 20]);
+            //    Console.ResetColor();
+            //}
+            //else
+            //{
+            //    Console.SetCursorPosition(hudX + 20, hudY + 1);
+            //    Console.Write(" ");
+            //}
+
+            //if (hudX + 20 <= columns && hudY - 1 <= rows)
+            //{
+            //    Console.SetCursorPosition(hudX, hudY - 1);
+
+            //    for (int z = 0; z < 20; z++)
+            //    {
+            //        Console.SetCursorPosition(hudX + z, hudY);
+            //        Console.Write(mapTiles[hudY, hudX + z]);
+            //        Console.ResetColor();
+            //    }
+            //}
+
+            //if (hudX + 20 <= columns && hudY <= rows)
+            //{
+            //    Console.SetCursorPosition(hudX, hudY);
+
+            //    for (int z = 0; z < 20; z++)
+            //    {
+            //        Console.SetCursorPosition(hudX + z, hudY);
+            //        Console.Write(mapTiles[hudY, hudX + z]);
+            //        Console.ResetColor();
+            //    }
+            //}
+
+            //if (hudX + 20 <= columns && hudY + 1 <= rows)
+            //{
+            //    Console.SetCursorPosition(hudX, hudY + 1);
+
+            //    for (int z = 0; z < 20; z++)
+            //    {
+            //        Console.SetCursorPosition(hudX + z, hudY + 1);
+            //        Console.Write(mapTiles[hudY + 1, hudX + z]);
+            //        Console.ResetColor();
+            //    }
+            //}
         }
 
         public bool IsObjectSolid(int testX, int testY)

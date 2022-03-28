@@ -13,8 +13,7 @@ namespace Test_Based_RPG
         private readonly ConsoleKey DOWN = ConsoleKey.S;
         private readonly ConsoleKey LEFT = ConsoleKey.A;
         private readonly ConsoleKey RIGHT = ConsoleKey.D;
-        public List<Item> Inventory;
-        public int money;
+        public int direction;
         public Player()
         {
             damage = 1;
@@ -23,10 +22,9 @@ namespace Test_Based_RPG
             x = 10;
             y = 10;
             avatar = '@';
-            money = 0;
-            Inventory = new List<Item>();
+           
         }
-        public void CalculateMovement(Map map, EnemyManager enemyManager, HUD hud, Door door)
+        public void CalculateMovement(Map map, EnemyManager enemyManager, HUD hud, Door door, Camera camera)
         {
 
             SaveLastPosition();
@@ -35,18 +33,22 @@ namespace Test_Based_RPG
             if (input == UP || input == ConsoleKey.UpArrow)
             {
                 deltaY = -1;
+                direction = 1;
             }
             else if (input == DOWN || input == ConsoleKey.DownArrow)
             {
                 deltaY = 1;
+                direction = 2;
             }
             else if (input == LEFT || input == ConsoleKey.LeftArrow)
             {
                 deltaX = -1;
+                direction = 3;
             }
             else if (input == RIGHT || input == ConsoleKey.RightArrow)
             {
                 deltaX = +1;
+                direction = 4;
             }
 
             GetFuturePosition();
@@ -55,6 +57,7 @@ namespace Test_Based_RPG
             {
                 Console.Beep(250, 33);
                 canMoveThere = false;
+                direction = 0;
             }
 
             for (int i = 0; i < enemyManager.enemies.Length; i ++)
@@ -64,10 +67,11 @@ namespace Test_Based_RPG
                     if (IsGameCharacter(this, enemyManager.enemies[i]))
                     {
                         enemyManager.enemies[i].TakeDamage(damage);
-                        hud.ShowEnemyStats(enemyManager.enemies[i], map);
+                        hud.ShowEnemyStats(enemyManager.enemies[i], map, camera);
                         Console.Beep(300, 33);
                         Console.Beep(400, 33);
                         canMoveThere = false;
+                        direction = 0;
                     }
                 }
             }
@@ -76,26 +80,10 @@ namespace Test_Based_RPG
             {
                 Console.Beep(250, 33);
                 canMoveThere = false;
+                direction = 0;
             }
             
             Move();
-        }
-
-        public void ShowInventory(Map map)
-        {
-            Console.SetCursorPosition(map.columns + 5, 0);
-            Console.Write("Money: " + money);
-            Console.SetCursorPosition(map.columns + 5, 1);
-            Console.Write("Player Inventory: ");
-            int i = 2;
-            foreach (Item item in Inventory)
-            {
-                Console.SetCursorPosition(map.columns + 5, i);
-                Console.Write(item.name);
-                i++;
-            }
-        }
-
-       
+        } 
     }
 }

@@ -15,10 +15,13 @@ namespace Test_Based_RPG
         public ItemManager itemManager;
         public Door door;
         public HUD hud;
+        public Camera camera;
+        public Inventory inventory;
         public void InitializeGame()
         {
             //On game launch
             hud = new HUD();
+            camera = new Camera();
             map = new Map();
             map.GetMapData();
             enemyManager = new EnemyManager();
@@ -27,23 +30,32 @@ namespace Test_Based_RPG
             itemManager.CreateItems();
             player = new Player();
             door = new Door();
-            player.ShowInventory(map);
+            inventory = new Inventory();
+            inventory.ShowInventory(camera);
+            map.Update(player, enemyManager, itemManager, door, camera, inventory.inventoryCoordX, inventory.inventoryCoordY);
             Console.CursorVisible = false;
         }
 
-        public void GameLoop(Player player, Map map, EnemyManager enemyManager, HUD hud, ItemManager itemManager, Door door)
+        public void GameLoop(Player player, Map map, EnemyManager enemyManager, HUD hud, ItemManager itemManager, Door door, Camera camera, Inventory inventory)
         {
             //Game Loop
             while (player.dead == false)
             {
-                hud.ShowPlayerStats(player, map);
-                map.Update(player, enemyManager, itemManager, door);
-                player.ShowInventory(map);
-                player.CalculateMovement(map, enemyManager, hud, door);
-                door.Update(player, enemyManager, (Key)itemManager.items[0]);
-                enemyManager.Update(map, player, enemyManager, hud, door);
-                itemManager.Update(player, (Key)itemManager.items[0]);
-                
+
+                map.Update(player, enemyManager, itemManager, door, camera, inventory.inventoryCoordX, inventory.inventoryCoordY);
+                hud.ShowPlayerStats(ref player, map, camera);
+                camera.Update(player);
+                inventory.ShowInventory(camera);
+                if (inventory.money == 25)
+                {
+                    Console.ReadKey(true);
+                    WinGame();
+                }
+                player.CalculateMovement(map, enemyManager, hud, door, camera);
+                door.Update(player, enemyManager, (Key)itemManager.items[0], inventory);
+                enemyManager.Update(map, player, enemyManager, hud, door, camera);
+                itemManager.Update(player, (Key)itemManager.items[0], inventory);
+
             }
         }
 
@@ -58,10 +70,22 @@ namespace Test_Based_RPG
             Console.ReadKey(true);
         }
 
+        public void WinGame()
+        {
+            //Game Win
+            Console.Clear();
+            Console.SetCursorPosition(5, 10);
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine("Congratulations! You won the game!");
+            Console.ResetColor();
+            Console.ReadKey(true);
+            System.Environment.Exit(0);
+        }
+
         public void LaunchGame()
         {
             InitializeGame();
-            GameLoop(player, map, enemyManager, hud, itemManager, door);
+            GameLoop(player, map, enemyManager, hud, itemManager, door, camera, inventory);
             EndGame();
         }
     }

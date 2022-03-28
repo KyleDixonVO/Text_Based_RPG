@@ -8,16 +8,16 @@ namespace Test_Based_RPG
 {
     class Sentinel : Enemy
     {
-        public Sentinel()
+        public Sentinel(int posX, int posY)
         {
             damage = 2;
             avatar = 'S';
             health = 3;
             maxHealth = health;
-            x = 15;
-            y = 5;
+            x = posX;
+            y = posY;
         }
-        public override void CalculateMovement(Map map, Player player, EnemyManager enemyManager, HUD hud, Door door)
+        public override void CalculateMovement(Map map, Player player, EnemyManager enemyManager, HUD hud, Door door, Camera camera)
         {
             SaveLastPosition();
             canMoveThere = true;
@@ -58,7 +58,7 @@ namespace Test_Based_RPG
                 Console.Beep(200, 33);
                 Console.Beep(100, 33);
                 player.TakeDamage(damage);
-                hud.ShowPlayerStats(player, map);
+                hud.ShowPlayerStats(ref player, map, camera);
                 canMoveThere = false;
             }
 
