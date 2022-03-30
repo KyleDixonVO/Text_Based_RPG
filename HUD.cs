@@ -8,7 +8,7 @@ namespace Test_Based_RPG
 {
     class HUD
     {
-        public void ShowPlayerStats(ref Player player, Map map, Camera camera)
+        public void ShowPlayerStats(ref Player player, Renderer renderer, Camera camera)
         {
             Console.ForegroundColor = ConsoleColor.White;
             Console.BackgroundColor = ConsoleColor.DarkGreen;
@@ -17,7 +17,7 @@ namespace Test_Based_RPG
             Console.ResetColor();
         }
 
-        public void ShowEnemyStats(Enemy enemy, Map map, Camera camera)
+        public void ShowEnemyStats(Enemy enemy, Renderer renderer, Camera camera)
         {
             Console.ForegroundColor = ConsoleColor.Black;
             Console.BackgroundColor = ConsoleColor.Red;

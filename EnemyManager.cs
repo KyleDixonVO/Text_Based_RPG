@@ -38,13 +38,13 @@ namespace Test_Based_RPG
             Console.Clear();
         }
 
-        public void MoveEnemies(Map map, Player player, EnemyManager enemyManager, HUD hud, Door door, Camera camera)
+        public void MoveEnemies(Renderer renderer, Map map, Player player, EnemyManager enemyManager, HUD hud, Door door, Camera camera)
         {
             for (int j = 0; j < enemies.Length; j++)
             {
                 if (enemies[j] != null)
                 {
-                    enemies[j].CalculateMovement(map, player, enemyManager, hud, door, camera);
+                    enemies[j].CalculateMovement(renderer, map, player, enemyManager, hud, door, camera);
                 }
             }
         }
@@ -65,10 +65,18 @@ namespace Test_Based_RPG
             enemy = null;
         }
 
-        public void Update(Map map, Player player, EnemyManager enemyManager, HUD hud, Door door, Camera camera)
+        public void Update(Renderer renderer, Map map, Player player, EnemyManager enemyManager, HUD hud, Door door, Camera camera)
         {
             CheckIfDead();
-            MoveEnemies(map, player, enemyManager, hud, door, camera);
+            MoveEnemies(renderer, map, player, enemyManager, hud, door, camera);
+        }
+
+        public void Draw(Renderer renderer, Camera camera)
+        {
+            for (int i = 0; i < enemies.Length; i++)
+            {
+                renderer.Draw(enemies[i].x, enemies[i].y, enemies[i].avatar, camera);
+            }
         }
     }
 }

@@ -9,12 +9,14 @@ namespace Test_Based_RPG
     class Door : GameObject
     {
         public bool doorOpened;
+        public bool playerCollision;
         public Door()
         {
             x = 3;
             y = 2;
             avatar = 'D';
             doorOpened = false;
+            playerCollision = false;
         }
 
         public void OpenWithKey(Inventory inventory, Key key)
@@ -40,6 +42,17 @@ namespace Test_Based_RPG
         public void Update(Player player, EnemyManager enemyManager, Key key, Inventory inventory)
         {
             OpenWithKey(inventory, key);
+        }
+
+        public void Draw(Renderer renderer, Camera camera)
+        {
+            if (doorOpened == false)
+            {
+                Console.ForegroundColor = ConsoleColor.Yellow;
+                Console.BackgroundColor = ConsoleColor.DarkYellow;
+                renderer.Draw(x, y, avatar, camera);
+                Console.ResetColor();
+            }
         }
     }
 }

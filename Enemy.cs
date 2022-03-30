@@ -39,7 +39,12 @@ namespace Test_Based_RPG
             }
         }
 
-        public virtual void CalculateMovement(Map map, Player player, EnemyManager enemyManager, HUD hud, Door door, Camera camera)
+        public virtual void CalculateMovement(Renderer renderer, Map map, Player player, EnemyManager enemyManager, HUD hud, Door door, Camera camera)
+        {
+
+        }
+
+        public virtual void Draw(Renderer renderer, Camera camera)
         {
 
         }

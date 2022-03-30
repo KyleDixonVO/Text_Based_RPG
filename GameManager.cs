@@ -10,6 +10,7 @@ namespace Test_Based_RPG
     {
         public bool gameOver = false;
         public Player player;
+        public Renderer renderer;
         public Map map;
         public EnemyManager enemyManager;
         public ItemManager itemManager;
@@ -23,6 +24,7 @@ namespace Test_Based_RPG
             hud = new HUD();
             camera = new Camera();
             map = new Map();
+            renderer = new Renderer();
             map.GetMapData();
             enemyManager = new EnemyManager();
             enemyManager.CreateEnemies();
@@ -32,30 +34,28 @@ namespace Test_Based_RPG
             door = new Door();
             inventory = new Inventory();
             inventory.ShowInventory(camera);
-            map.Update(player, enemyManager, itemManager, door, camera, inventory.inventoryCoordX, inventory.inventoryCoordY);
+            //renderer.Update(player, enemyManager, itemManager, door, camera, inventory.inventoryCoordX, inventory.inventoryCoordY, map);
             Console.CursorVisible = false;
         }
 
-        public void GameLoop(Player player, Map map, EnemyManager enemyManager, HUD hud, ItemManager itemManager, Door door, Camera camera, Inventory inventory)
+        public void GameLoop(Player player, Renderer renderer, Map map, EnemyManager enemyManager, HUD hud, ItemManager itemManager, Door door, Camera camera, Inventory inventory)
         {
             //Game Loop
             while (player.dead == false)
             {
-
-                map.Update(player, enemyManager, itemManager, door, camera, inventory.inventoryCoordX, inventory.inventoryCoordY);
-                hud.ShowPlayerStats(ref player, map, camera);
+                player.CalculateMovement(renderer, map, enemyManager, hud, door, camera);
                 camera.Update(player);
-                inventory.ShowInventory(camera);
-                if (inventory.money == 25)
-                {
-                    Console.ReadKey(true);
-                    WinGame();
-                }
-                player.CalculateMovement(map, enemyManager, hud, door, camera);
                 door.Update(player, enemyManager, (Key)itemManager.items[0], inventory);
-                enemyManager.Update(map, player, enemyManager, hud, door, camera);
+                enemyManager.Update(renderer, map, player, enemyManager, hud, door, camera);
                 itemManager.Update(player, (Key)itemManager.items[0], inventory);
-
+                map.Draw(renderer, camera);
+                itemManager.Draw(renderer, camera);
+                enemyManager.Draw(renderer, camera);
+                door.Draw(renderer, camera);
+                player.Draw(renderer, camera);
+                
+                hud.ShowPlayerStats(ref player, renderer, camera);
+                inventory.ShowInventory(camera);
             }
         }
 
@@ -85,7 +85,7 @@ namespace Test_Based_RPG
         public void LaunchGame()
         {
             InitializeGame();
-            GameLoop(player, map, enemyManager, hud, itemManager, door, camera, inventory);
+            GameLoop(player, renderer, map, enemyManager, hud, itemManager, door, camera, inventory);
             EndGame();
         }
     }

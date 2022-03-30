@@ -21,7 +21,12 @@ namespace Test_Based_RPG
             y = posY;
         }
 
-        public override void CalculateMovement(Map map, Player player, EnemyManager enemyManager, HUD hud, Door door, Camera camera)
+        public override void Draw(Renderer renderer, Camera camera)
+        {
+            renderer.Draw(x, y, avatar, camera);
+        }
+
+        public override void CalculateMovement(Renderer renderer, Map map, Player player, EnemyManager enemyManager, HUD hud, Door door, Camera camera)
         {
 
             
@@ -58,7 +63,7 @@ namespace Test_Based_RPG
                 }
 
                 //detecting collision with solid objects
-                if (map.IsObjectSolid(futureX, futureY))
+                if (renderer.IsObjectSolid(futureX, futureY, map))
                 {
                     canMoveThere = false;
                 }
@@ -71,7 +76,7 @@ namespace Test_Based_RPG
                     player.TakeDamage(damage);
                     canMoveThere = false;
                     playerHit = true;
-                    hud.ShowPlayerStats(ref player, map, camera);
+                    hud.ShowPlayerStats(ref player, renderer, camera);
                 }
 
                 for (int i = 0; i < enemyManager.enemies.Length; i++)

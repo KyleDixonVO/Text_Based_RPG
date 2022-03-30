@@ -17,7 +17,13 @@ namespace Test_Based_RPG
             x = posX;
             y = posY;
         }
-        public override void CalculateMovement(Map map, Player player, EnemyManager enemyManager, HUD hud, Door door, Camera camera)
+
+        public override void Draw(Renderer renderer, Camera camera)
+        {
+            renderer.Draw(x, y, avatar, camera);
+        }
+
+        public override void CalculateMovement(Renderer renderer, Map map, Player player, EnemyManager enemyManager, HUD hud, Door door, Camera camera)
         {
             SaveLastPosition();
             canMoveThere = true;
@@ -48,7 +54,7 @@ namespace Test_Based_RPG
             }
             GetFuturePosition();
 
-            if (map.IsObjectSolid(futureX, futureY))
+            if (renderer.IsObjectSolid(futureX, futureY, map))
             {
                 canMoveThere = false;
             }
@@ -58,7 +64,7 @@ namespace Test_Based_RPG
                 Console.Beep(200, 33);
                 Console.Beep(100, 33);
                 player.TakeDamage(damage);
-                hud.ShowPlayerStats(ref player, map, camera);
+                hud.ShowPlayerStats(ref player, renderer, camera);
                 canMoveThere = false;
             }
 

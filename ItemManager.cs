@@ -77,5 +77,15 @@ namespace Test_Based_RPG
             CheckIfUsed();
             CheckContact(player, key, inventory);
         }
+
+        public void Draw(Renderer renderer, Camera camera)
+        {
+            for (int i = 0; i < items.Length; i++)
+            {
+                renderer.SetItemColor(this, i);
+                renderer.Draw(items[i].x, items[i].y, items[i].avatar, camera);
+                Console.ResetColor();
+            }
+        }
     }
 }
