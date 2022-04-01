@@ -59,7 +59,8 @@ namespace Test_Based_RPG
                 Console.Beep(100, 33);
                 player.TakeDamage(damage);
                 canMoveThere = false;
-                hud.ShowPlayerStats(ref player, renderer, camera);
+                hud.ShowPlayerStats(ref player);
+                hud.ShowEnemyStats(this);
             }
 
             for (int i = 0; i < enemyManager.enemies.Length; i++)
@@ -68,7 +69,7 @@ namespace Test_Based_RPG
                 {
                     if (IsGameCharacter(this, enemyManager.enemies[i]) == true && (this != enemyManager.enemies[i]))
                     {
-                        canMoveThere = false;
+                        this.canMoveThere = false;
                     }
                 }
             }

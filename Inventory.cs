@@ -21,17 +21,17 @@ namespace Test_Based_RPG
         }
         public void ShowInventory(Camera camera)
         {
-            //Console.SetCursorPosition(Console.WindowLeft + camera.windowWidth - 18, Console.WindowTop +1);
+            Console.SetCursorPosition(Console.WindowLeft + 1, Console.WindowTop + 15);
             inventoryCoordX = Console.CursorLeft;
             inventoryCoordY = Console.CursorTop;
-            //Console.Write("Money: " + money);
-            //Console.SetCursorPosition(Console.WindowLeft + camera.windowWidth - 18, Console.WindowTop + 2);
-            //Console.Write("Player Inventory:");
-            int i = 2;
+            Console.Write("Money: " + money);
+            Console.SetCursorPosition(Console.WindowLeft + 1, Console.WindowTop + 16);
+            Console.Write("Player Inventory:");
+            int i = 17;
             foreach (Item item in PlayerInventory)
             {
-                //Console.SetCursorPosition(Console.WindowLeft + camera.windowWidth - 18, Console.WindowTop + i);
-                //Console.Write(item.name);
+                Console.SetCursorPosition(Console.WindowLeft + 1, Console.WindowTop + 17);
+                Console.Write(item.name);
                 i++;
             }
         }

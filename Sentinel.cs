@@ -64,8 +64,9 @@ namespace Test_Based_RPG
                 Console.Beep(200, 33);
                 Console.Beep(100, 33);
                 player.TakeDamage(damage);
-                hud.ShowPlayerStats(ref player, renderer, camera);
-                canMoveThere = false;
+                hud.ShowPlayerStats(ref player);
+                hud.ShowEnemyStats(this);
+                this.canMoveThere = false;
             }
 
             for (int i = 0; i < enemyManager.enemies.Length; i++)

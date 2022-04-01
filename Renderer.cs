@@ -20,7 +20,16 @@ namespace Test_Based_RPG
             if (screenX < camera.worldCamX || screenX > camera.worldCamX + camera.cameraWidth || screenY < camera.worldCamY || screenY > camera.worldCamY + camera.cameraHeight) return;
 
             Console.SetCursorPosition(screenX, screenY);
-            Console.Write(Avatar);
+
+            if (screenX < 0 || screenY < 0)
+            {
+                Console.Write(" ");
+            }
+            else
+            {
+                Console.Write(Avatar);
+            }
+            
         }
 
         public bool IsObjectSolid(int testX, int testY, Map map)

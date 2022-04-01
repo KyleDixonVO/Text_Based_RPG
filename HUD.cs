@@ -8,21 +8,21 @@ namespace Test_Based_RPG
 {
     class HUD
     {
-        public void ShowPlayerStats(ref Player player, Renderer renderer, Camera camera)
+        public void ShowPlayerStats(ref Player player)
         {
             Console.ForegroundColor = ConsoleColor.White;
             Console.BackgroundColor = ConsoleColor.DarkGreen;
-            Console.SetCursorPosition(Console.WindowLeft +1, Console.WindowTop + camera.windowHeight - 2);
-            //Console.Write(player.avatar + " health: " + player.health + "/" + player.maxHealth + " damage: " + player.damage + " ");
+            Console.SetCursorPosition(Console.WindowLeft +1, Console.WindowTop + 10);
+            Console.Write(player.avatar + " health: " + player.health + "/" + player.maxHealth + " damage: " + player.damage + " ");
             Console.ResetColor();
         }
 
-        public void ShowEnemyStats(Enemy enemy, Renderer renderer, Camera camera)
+        public void ShowEnemyStats(Enemy enemy)
         {
             Console.ForegroundColor = ConsoleColor.Black;
             Console.BackgroundColor = ConsoleColor.Red;
-            Console.SetCursorPosition(Console.WindowLeft +1, Console.WindowTop + camera.windowHeight - 1);
-            //Console.Write(enemy.avatar + " health: " + enemy.health + "/" + enemy.maxHealth + " ");
+            Console.SetCursorPosition(Console.WindowLeft +1, Console.WindowTop + 11);
+            Console.Write(enemy.avatar + " "+ enemy.name + " health: " + enemy.health + "/" + enemy.maxHealth + " ");
             Console.ResetColor();
         }
     }

@@ -12,7 +12,6 @@ namespace Test_Based_RPG
         const int maxEnemies = 32;
         public Enemy[] enemies = new Enemy[maxEnemies];
         private Random rd = new Random();
-        private int randomType;
 
         public void CreateEnemies()
         {
@@ -55,14 +54,17 @@ namespace Test_Based_RPG
             {   if (enemies[i] == null) { return; }
                 if (enemies[i].dead == true)
                 {
-                    NullEnemy(enemies[i]);
+                    NullEnemy(enemies, i);
                 }
             }
         }
 
-        public void NullEnemy(Enemy enemy)
+        public void NullEnemy(Enemy[] enemies, int i)
         {
-            enemy = null;
+            Console.SetCursorPosition(Console.WindowLeft + 1, Console.WindowTop + 18);
+            Console.Write("                            ");
+            Console.Write("Enemy: " + enemies[i].name + " is about to be nulled");
+            enemies[i] = null;
         }
 
         public void Update(Renderer renderer, Map map, Player player, EnemyManager enemyManager, HUD hud, Door door, Camera camera)
@@ -75,7 +77,18 @@ namespace Test_Based_RPG
         {
             for (int i = 0; i < enemies.Length; i++)
             {
-                renderer.Draw(enemies[i].x, enemies[i].y, enemies[i].avatar, camera);
+                if (enemies[i] == null) return;
+                if (enemies[i].dead == true)
+                {
+                    renderer.Draw(enemies[i].x, enemies[i].y, '\0', camera);
+                }
+                else
+                {
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    renderer.Draw(enemies[i].x, enemies[i].y, enemies[i].avatar, camera);
+                    Console.ResetColor();
+                }
+                
             }
         }
     }

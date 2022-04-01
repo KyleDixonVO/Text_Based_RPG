@@ -79,12 +79,30 @@ namespace Test_Based_RPG
         }
 
         public void Draw(Renderer renderer, Camera camera)
-        {
-            for (int i = 0; i < items.Length; i++)
+        {   if (items[0].obtained == false)
             {
-                renderer.SetItemColor(this, i);
-                renderer.Draw(items[i].x, items[i].y, items[i].avatar, camera);
-                Console.ResetColor();
+                renderer.SetItemColor(this, 0);
+                renderer.Draw(items[0].x, items[0].y, items[0].avatar, camera);
+            }
+            else
+            {
+                renderer.Draw(items[0].x, items[0].y, '\0', camera);
+            }
+
+
+            for (int i = 1; i < items.Length; i++)
+            {
+                if (items[i].used == false)
+                {
+                    renderer.SetItemColor(this, i);
+                    renderer.Draw(items[i].x, items[i].y, items[i].avatar, camera);
+                    Console.ResetColor();
+                }
+                else
+                {
+                    renderer.Draw(items[i].x, items[i].y, '\0', camera);
+                }
+
             }
         }
     }

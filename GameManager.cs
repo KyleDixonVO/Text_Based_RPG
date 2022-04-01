@@ -45,16 +45,15 @@ namespace Test_Based_RPG
             {
                 player.CalculateMovement(renderer, map, enemyManager, hud, door, camera);
                 camera.Update(player);
+                map.Draw(renderer, camera);
                 door.Update(player, enemyManager, (Key)itemManager.items[0], inventory);
                 enemyManager.Update(renderer, map, player, enemyManager, hud, door, camera);
-                itemManager.Update(player, (Key)itemManager.items[0], inventory);
-                map.Draw(renderer, camera);
-                itemManager.Draw(renderer, camera);
                 enemyManager.Draw(renderer, camera);
+                itemManager.Update(player, (Key)itemManager.items[0], inventory);
+                itemManager.Draw(renderer, camera);
                 door.Draw(renderer, camera);
                 player.Draw(renderer, camera);
-                
-                hud.ShowPlayerStats(ref player, renderer, camera);
+                hud.ShowPlayerStats(ref player);
                 inventory.ShowInventory(camera);
             }
         }
