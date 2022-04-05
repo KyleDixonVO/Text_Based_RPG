@@ -37,20 +37,27 @@ namespace Test_Based_RPG
             Console.SetWindowSize(windowWidth, windowHeight);
         }
 
-        public bool InCameraWindow(int x, int y)
+        public void Update(Player player, Map map)
         {
-            if (x < camOriginX || x > camOriginX + windowWidth || y < camOriginY || y > camOriginY + windowHeight)
+
+            if (player.x < ((cameraWidth/2)) || player.x > map.columns - cameraHeight)
             {
-                return false;
+
+            }
+            else
+            {
+                camOriginX = player.x;
             }
 
-            return true;
-        }
+            if (player.y < 3 || player.y > map.rows - 5)
+            {
 
-        public void Update(Player player)
-        {
-            camOriginX = player.x;
-            camOriginY = player.y;
+            }
+            else
+            {
+                camOriginY = player.y;
+            }
+
         }
 
         protected int Clamp(int value, int MinOffset, int MaxOffset)

@@ -21,7 +21,7 @@ namespace Test_Based_RPG
 
             Console.SetCursorPosition(screenX, screenY);
 
-            if (screenX < 0 || screenY < 0)
+            if (worldX < 0 || worldY < 0)
             {
                 Console.Write(" ");
             }

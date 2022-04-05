@@ -13,7 +13,7 @@ namespace Test_Based_RPG
             Console.ForegroundColor = ConsoleColor.White;
             Console.BackgroundColor = ConsoleColor.DarkGreen;
             Console.SetCursorPosition(Console.WindowLeft +1, Console.WindowTop + 10);
-            Console.Write(player.avatar + " health: " + player.health + "/" + player.maxHealth + " damage: " + player.damage + " ");
+            Console.Write(player.avatar + " health: " + player.health + "/" + player.maxHealth + " damage: " + player.damage + " " + "(" + player.x + "," + player.y + ")"+ "  ");
             Console.ResetColor();
         }
 

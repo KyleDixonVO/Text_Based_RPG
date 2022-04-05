@@ -45,7 +45,7 @@ namespace Test_Based_RPG
             while (!InLoseState())
             {
                 player.CalculateMovement(renderer, map, enemyManager, hud, door, camera);
-                camera.Update(player);
+                camera.Update(player, map);
                 map.Draw(renderer, camera);
                 door.Update(player, enemyManager, (Key)itemManager.items[0], inventory);
                 enemyManager.Update(renderer, map, player, enemyManager, hud, door, camera);
