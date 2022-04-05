@@ -68,31 +68,21 @@ namespace Test_Based_RPG
 
             for (int i = 0; i < enemyManager.enemies.Length; i ++)
             {
-                if (enemyManager.enemies[i] == null)
+                if (enemyManager.enemies[i] != null)
                 {
-                    this.canMoveThere = true; 
-                    return;
-                }
-
-
-                if (enemyManager.enemies[i].dead == true)
-                {
-                    this.canMoveThere = true; 
-                    return;
-                }
-
-
-
-                if (IsGameCharacter(this, enemyManager.enemies[i]))
+                    if (enemyManager.enemies[i].dead != true)
                     {
-                        enemyManager.enemies[i].TakeDamage(damage);
-                        hud.ShowEnemyStats(enemyManager.enemies[i]);
-                        Console.Beep(300, 33);
-                        Console.Beep(400, 33);
-                        canMoveThere = false;
-                        direction = 0;
+                        if (IsGameCharacter(this, enemyManager.enemies[i]))
+                        {
+                            enemyManager.enemies[i].TakeDamage(damage);
+                            hud.ShowEnemyStats(enemyManager.enemies[i]);
+                            Console.Beep(300, 33);
+                            Console.Beep(400, 33);
+                            canMoveThere = false;
+                            direction = 0;
+                        }
                     }
-                
+                } 
             }
 
             if (door.WillEntityCollide(this))

@@ -35,5 +35,10 @@ namespace Test_Based_RPG
                 i++;
             }
         }
+
+        public void Update(Camera camera)
+        {
+            ShowInventory(camera);
+        }
     }
 }

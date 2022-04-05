@@ -59,7 +59,7 @@ namespace Test_Based_RPG
                 Console.Beep(100, 33);
                 player.TakeDamage(damage);
                 canMoveThere = false;
-                hud.ShowPlayerStats(ref player);
+                hud.ShowPlayerStats(player);
                 hud.ShowEnemyStats(this);
             }
 

@@ -76,7 +76,7 @@ namespace Test_Based_RPG
                     player.TakeDamage(damage);
                     this.canMoveThere = false;
                     playerHit = true;
-                    hud.ShowPlayerStats(ref player);
+                    hud.ShowPlayerStats(player);
                     hud.ShowEnemyStats(this);
                 }
 

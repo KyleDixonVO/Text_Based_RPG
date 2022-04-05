@@ -8,7 +8,7 @@ namespace Test_Based_RPG
 {
     class HUD
     {
-        public void ShowPlayerStats(ref Player player)
+        public void ShowPlayerStats(Player player)
         {
             Console.ForegroundColor = ConsoleColor.White;
             Console.BackgroundColor = ConsoleColor.DarkGreen;
@@ -24,6 +24,11 @@ namespace Test_Based_RPG
             Console.SetCursorPosition(Console.WindowLeft +1, Console.WindowTop + 11);
             Console.Write(enemy.avatar + " "+ enemy.name + " health: " + enemy.health + "/" + enemy.maxHealth + " ");
             Console.ResetColor();
+        }
+
+        public void Update(Player player)
+        {
+            ShowPlayerStats(player);
         }
     }
 }

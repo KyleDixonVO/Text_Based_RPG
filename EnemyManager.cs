@@ -12,8 +12,10 @@ namespace Test_Based_RPG
         const int maxEnemies = 32;
         public Enemy[] enemies = new Enemy[maxEnemies];
         private Random rd = new Random();
+        private int nextX;
+        private int nextY;
 
-        public void CreateEnemies()
+        public void CreateEnemies(Map map, Renderer renderer)
         {
             enemies[0] = new Sentinel(3, 25);
             enemies[0].name = ("Sentinel0");
@@ -23,11 +25,13 @@ namespace Test_Based_RPG
             {
                 if (i < 28)
                 {
-                    enemies[i] = new Spaz(rd.Next(20, 40), rd.Next(19, 27));
+                    IsSpawnValid(20, 40, 19, 27, renderer, map);
+                    enemies[i] = new Spaz(nextX, nextY);
                     enemies[i].name = ("spaz" + i.ToString());
                 }
                 else
                 {
+                    IsSpawnValid(33, 40, 2, 6, renderer, map);
                     enemies[i] = new Tracker(rd.Next(33, 40), rd.Next(2, 6));
                     enemies[i].name = ("tracker" + i.ToString());
                 }
@@ -41,7 +45,7 @@ namespace Test_Based_RPG
         {
             for (int j = 0; j < enemies.Length; j++)
             {
-                if (enemies[j] != null)
+                if (enemies[j].dead == false)
                 {
                     enemies[j].CalculateMovement(renderer, map, player, enemyManager, hud, door, camera);
                 }
@@ -51,10 +55,14 @@ namespace Test_Based_RPG
         public void CheckIfDead()
         {
             for (int i = 0; i < maxEnemies; i++)
-            {   if (enemies[i] == null) { return; }
+            {   
+                if (enemies[i] == null) { return; }
                 if (enemies[i].dead == true)
                 {
-                    NullEnemy(enemies, i);
+                    enemies[i].y = Console.WindowHeight + Console.CursorTop;
+                    enemies[i].x = Console.WindowWidth + Console.WindowLeft;
+                    enemies[i].futureX = Console.WindowHeight + Console.CursorTop;
+                    enemies[i].futureY = Console.WindowWidth + Console.WindowLeft;
                 }
             }
         }
@@ -89,6 +97,21 @@ namespace Test_Based_RPG
                     Console.ResetColor();
                 }
                 
+            }
+        }
+
+        public void IsSpawnValid(int MinX, int MaxX, int MinY, int MaxY, Renderer renderer, Map map)
+        {
+            int valueX = rd.Next(MinX, MaxX);
+            int valueY = rd.Next(MinY, MaxY);
+            if (renderer.IsObjectSolid(valueX, valueY, map) == true)
+            {
+                IsSpawnValid(MinX, MaxX, MinY, MaxY, renderer, map);
+            }
+            else
+            {
+                nextX = valueX;
+                nextY = valueY;
             }
         }
     }

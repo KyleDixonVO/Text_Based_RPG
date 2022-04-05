@@ -17,9 +17,9 @@ namespace Test_Based_RPG
         private string[] dataFromFile;
         private char[] charsFromFile;
 
-        public void GetMapData()
+        public void GetMapData(Settings settings)
         {
-            if (!File.Exists("mapData.txt"))
+            if (!File.Exists(settings.MapDataPath))
             {
                 Console.WriteLine("mapData.txt cannot be found. Ensure mapData has not been moved or renamed.");
                 Console.ReadKey(true);

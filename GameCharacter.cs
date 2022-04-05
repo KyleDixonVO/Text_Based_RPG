@@ -47,7 +47,7 @@ namespace Test_Based_RPG
         {
             if (gameCharacter == null || gameCharacter1 == null) return false; 
             
-            if ((gameCharacter.futureX == gameCharacter1.x && gameCharacter.futureY == gameCharacter1.y)) //|| (gameCharacter.x == gameCharacter1.futureX && gameCharacter.y == gameCharacter1.futureY))
+            if (gameCharacter.futureX == gameCharacter1.x && gameCharacter.futureY == gameCharacter1.y) //|| (gameCharacter.x == gameCharacter1.futureX && gameCharacter.y == gameCharacter1.futureY))
             {
                 return true;
             }

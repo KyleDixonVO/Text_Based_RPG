@@ -12,6 +12,8 @@ namespace Test_Based_RPG
         public Item[] items = new Item[maxItems];
         private Random rd = new Random();
         private int randomType;
+        private int nextX;
+        private int nextY;
 
         public void CheckContact(Player player, Key key, Inventory inventory)
         {
@@ -21,9 +23,9 @@ namespace Test_Based_RPG
             }
         }
 
-        public void CreateItems()
+        public void CreateItems(Renderer renderer, Map map)
         {
-            items[0] = new Key();
+            items[0] = new Key(3, 26);
             items[0].name = ("Key" + 0.ToString());
             Console.WriteLine(items[0].GetName());
             for (int i = 1; i < maxItems; i++)
@@ -38,12 +40,14 @@ namespace Test_Based_RPG
                     randomType = rd.Next(0, 2);
                     if (randomType == 0)
                     {
-                        items[i] = new Medkit(rd.Next(1, 50), rd.Next(20, 22));
+                        IsSpawnValid(1, 50, 20, 22, renderer, map);
+                        items[i] = new Medkit(nextX, nextY);
                         items[i].name = ("Medkit" + i.ToString());
                     }
                     else if (randomType == 1)
                     {
-                        items[i] = new PowerUp(rd.Next(50, 70), rd.Next(10, 15));
+                        IsSpawnValid(50, 70, 10, 15, renderer, map);
+                        items[i] = new PowerUp(nextX, nextY);
                         items[i].name = ("PowerUP" + i.ToString());
                     }
                 }
@@ -103,6 +107,21 @@ namespace Test_Based_RPG
                     renderer.Draw(items[i].x, items[i].y, '\0', camera);
                 }
 
+            }
+        }
+
+        public void IsSpawnValid(int MinX, int MaxX, int MinY, int MaxY, Renderer renderer, Map map)
+        {
+            int valueX = rd.Next(MinX, MaxX);
+            int valueY = rd.Next(MinY, MaxY);
+            if (renderer.IsObjectSolid(valueX, valueY, map) == true)
+            {
+                IsSpawnValid(MinX, MaxX, MinY, MaxY, renderer, map);
+            }
+            else
+            {
+                nextX = valueX;
+                nextY = valueY;
             }
         }
     }

@@ -8,6 +8,6 @@ namespace Test_Based_RPG
 {
     class Settings
     {
-        //not sure what to use this for, leaving empty for now.
+        public string MapDataPath = "mapData.txt";
     }
 }

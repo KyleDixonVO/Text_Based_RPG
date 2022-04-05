@@ -110,11 +110,11 @@ namespace Test_Based_RPG
 
     class Key : Item
     {
-        public Key()
+        public Key(int PosX, int PosY)
         {
             avatar = 'K';
-            x = 16;
-            y = 7;
+            x = PosX;
+            y = PosY;
             used = false;
             obtained = false;
             colorID = "key";

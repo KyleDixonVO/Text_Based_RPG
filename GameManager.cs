@@ -18,30 +18,31 @@ namespace Test_Based_RPG
         public HUD hud;
         public Camera camera;
         public Inventory inventory;
+        public Settings settings;
         public void InitializeGame()
         {
             //On game launch
+            settings = new Settings();
             hud = new HUD();
             camera = new Camera();
             map = new Map();
             renderer = new Renderer();
-            map.GetMapData();
+            map.GetMapData(settings);
             enemyManager = new EnemyManager();
-            enemyManager.CreateEnemies();
+            enemyManager.CreateEnemies(map, renderer);
             itemManager = new ItemManager();
-            itemManager.CreateItems();
+            itemManager.CreateItems(renderer, map);
             player = new Player();
             door = new Door();
             inventory = new Inventory();
             inventory.ShowInventory(camera);
-            //renderer.Update(player, enemyManager, itemManager, door, camera, inventory.inventoryCoordX, inventory.inventoryCoordY, map);
             Console.CursorVisible = false;
         }
 
         public void GameLoop(Player player, Renderer renderer, Map map, EnemyManager enemyManager, HUD hud, ItemManager itemManager, Door door, Camera camera, Inventory inventory)
         {
             //Game Loop
-            while (player.dead == false)
+            while (!InLoseState())
             {
                 player.CalculateMovement(renderer, map, enemyManager, hud, door, camera);
                 camera.Update(player);
@@ -53,14 +54,16 @@ namespace Test_Based_RPG
                 itemManager.Draw(renderer, camera);
                 door.Draw(renderer, camera);
                 player.Draw(renderer, camera);
-                hud.ShowPlayerStats(ref player);
-                inventory.ShowInventory(camera);
+                hud.Update(player);
+                inventory.Update(camera);
+                OnWinGame();
             }
+            GameOver();
         }
 
-        public void EndGame()
+        public void GameOver()
         {
-            //Game end
+            if (player.dead != true) return;
             Console.Clear();
             Console.SetCursorPosition(5, 10);
             Console.ForegroundColor = ConsoleColor.Red;
@@ -69,9 +72,11 @@ namespace Test_Based_RPG
             Console.ReadKey(true);
         }
 
-        public void WinGame()
+        public void OnWinGame()
         {
+            if (inventory.money < 20) return;
             //Game Win
+            Console.ReadKey(true);
             Console.Clear();
             Console.SetCursorPosition(5, 10);
             Console.ForegroundColor = ConsoleColor.Green;
@@ -81,11 +86,20 @@ namespace Test_Based_RPG
             System.Environment.Exit(0);
         }
 
+        public bool InLoseState()
+        {
+            if (player.dead == true)
+            {
+                return true;
+            }
+            return false;
+        }
+
         public void LaunchGame()
         {
             InitializeGame();
             GameLoop(player, renderer, map, enemyManager, hud, itemManager, door, camera, inventory);
-            EndGame();
+            GameOver();
         }
     }
 }
