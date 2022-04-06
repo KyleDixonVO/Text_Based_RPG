@@ -32,7 +32,7 @@ namespace Test_Based_RPG
             enemyManager.CreateEnemies(map, renderer);
             itemManager = new ItemManager();
             itemManager.CreateItems(renderer, map);
-            player = new Player();
+            player = new Player(map);
             door = new Door();
             inventory = new Inventory();
             inventory.ShowInventory(camera);
@@ -44,7 +44,7 @@ namespace Test_Based_RPG
             //Game Loop
             while (!InLoseState())
             {
-                player.CalculateMovement(renderer, map, enemyManager, hud, door, camera);
+                player.CalculateMovement(renderer, enemyManager, hud, door);
                 camera.Update(player, map);
                 map.Draw(renderer, camera);
                 door.Update(player, enemyManager, (Key)itemManager.items[0], inventory);

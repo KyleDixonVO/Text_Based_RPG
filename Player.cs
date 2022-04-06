@@ -8,14 +8,20 @@ namespace Test_Based_RPG
 {
     class Player: GameCharacter
     {
+        //refs
+        private Map map;
+
+
+        //vars
         private ConsoleKey input;
         private readonly ConsoleKey UP = ConsoleKey.W;
         private readonly ConsoleKey DOWN = ConsoleKey.S;
         private readonly ConsoleKey LEFT = ConsoleKey.A;
         private readonly ConsoleKey RIGHT = ConsoleKey.D;
         public int direction;
-        public Player()
+        public Player(Map map)
         {
+            this.map = map;
             damage = 1;
             health = 15;
             maxHealth = health;
@@ -30,7 +36,7 @@ namespace Test_Based_RPG
             renderer.Draw(x, y, avatar, camera);
         }
 
-        public void CalculateMovement(Renderer renderer, Map map, EnemyManager enemyManager, HUD hud, Door door, Camera camera)
+        public void CalculateMovement(Renderer renderer, EnemyManager enemyManager, HUD hud, Door door)
         {
 
             SaveLastPosition();
